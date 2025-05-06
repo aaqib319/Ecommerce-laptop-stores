@@ -1,0 +1,1712 @@
+[33mcommit d86106c4437bbf64da2bcd36c999c5019c9ea4d3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m)[m
+Author: Aaqib <aaqib319wb@gmail.com>
+Date:   Tue May 6 09:56:06 2025 +0500
+
+    Removed Stripe secret and switched to environment variable
+
+[1mdiff --git a/fyp/fyp/settings.py b/fyp/fyp/settings.py[m
+[1mindex 9d4e9a4..f681a8e 100644[m
+[1m--- a/fyp/fyp/settings.py[m
+[1m+++ b/fyp/fyp/settings.py[m
+[36m@@ -140,5 +140,10 @@[m [mCSRF_TRUSTED_ORIGINS = [[m
+ AUTHENTICATION_BACKENDS = [[m
+     'django.contrib.auth.backends.ModelBackend',[m
+ ][m
+[31m-STRIPE_PUBLIC_KEY = 'pk_test_51RGCqoQMAli56deWN2LmzRRUEgsB7fmtEVGhSjcyW9mSByHJcwH1rk19kC3icFm82wgg8a9Ab55k4GXNnW8B5tBu00kMoEeaNW'  [m
+[31m-STRIPE_SECRET_KEY = '***REMOVED***51RGCqoQMAli56deWGQbVEexVNtPNCxoRxm3PKv370eVDgawz9EW196FVaxV0pOcZlI2taOg0GXeDsOXMV0LW2V6y00DXgsta4Y'[m
+[32m+[m[32mSTRIPE_PUBLIC_KEY = 'pk_test_51RGCqoQMAli56deWN2LmzRRUEgsB7fmtEVGhSjcyW9mSByHJcwH1rk19kC3icFm82wgg8a9Ab55k4GXNnW8B5tBu00kMoEeaNW'>[m
+[32m+[m[32mimport os[m
+[32m+[m[32mfrom dotenv import load_dotenv[m
+[32m+[m[32mload_dotenv()[m
+[32m+[m
+[32m+[m[32mSTRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')[m
+[41m+[m
+
+[33mcommit 4ef7b8a549b947e45551d31e82054a0d65d8cd3d[m[33m ([m[1;32mnew-branch-name[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Aaqib <aaqib319wb@gmail.com>
+Date:   Tue May 6 09:32:41 2025 +0500
+
+    Initial commit with Django project files
+
+[1mdiff --git a/fyp/.gitignore b/fyp/.gitignore[m
+[1mnew file mode 100644[m
+[1mindex 0000000..74342b9[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/.gitignore[m
+[36m@@ -0,0 +1,15 @@[m
+[32m+[m[32m# Ignore Python bytecode files[m
+[32m+[m[32m*.pyc[m
+[32m+[m[32m__pycache__/[m
+[32m+[m
+[32m+[m[32m# Ignore the virtual environment directory[m
+[32m+[m[32mdjangoenv/[m
+[32m+[m
+[32m+[m[32m# Ignore SQLite database file[m
+[32m+[m[32mdb.sqlite3[m
+[32m+[m
+[32m+[m[32m# Ignore media files[m
+[32m+[m[32mmedia/[m
+[32m+[m
+[32m+[m[32m# Ignore static files (if you use a local directory for static files)[m
+[32m+[m[32mstatic/[m
+[1mdiff --git a/fyp/__init__.py b/fyp/__init__.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e69de29[m
+[1mdiff --git a/fyp/asgi.py b/fyp/asgi.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9398b2f[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/asgi.py[m
+[36m@@ -0,0 +1,16 @@[m
+[32m+[m[32m"""[m
+[32m+[m[32mASGI config for fyp project.[m
+[32m+[m
+[32m+[m[32mIt exposes the ASGI callable as a module-level variable named ``application``.[m
+[32m+[m
+[32m+[m[32mFor more information on this file, see[m
+[32m+[m[32mhttps://docs.djangoproject.com/en/5.1/howto/deployment/asgi/[m
+[32m+[m[32m"""[m
+[32m+[m
+[32m+[m[32mimport os[m
+[32m+[m
+[32m+[m[32mfrom django.core.asgi import get_asgi_application[m
+[32m+[m
+[32m+[m[32mos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fyp.settings')[m
+[32m+[m
+[32m+[m[32mapplication = get_asgi_application()[m
+[1mdiff --git a/fyp/fix_wishlist.py b/fyp/fix_wishlist.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..4d40ae0[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fix_wishlist.py[m
+[36m@@ -0,0 +1,19 @@[m
+[32m+[m[32mimport django[m
+[32m+[m[32mimport os[m
+[32m+[m
+[32m+[m[32mos.environ.setdefault("DJANGO_SETTINGS_MODULE", "fyp.settings")  # Replace with your actual project name[m
+[32m+[m[32mdjango.setup()[m
+[32m+[m
+[32m+[m[32mfrom fypapp.models import WishlistItem, ProductAttribute[m
+[32m+[m
+[32m+[m[32m# Loop through WishlistItems with missing attributes[m
+[32m+[m[32mfor item in WishlistItem.objects.filter(attribute__isnull=True):[m
+[32m+[m[32m    default_attribute = ProductAttribute.objects.filter(product=item.product).first()[m
+[32m+[m
+[32m+[m[32m    if default_attribute:[m
+[32m+[m[32m        item.attribute = default_attribute[m
+[32m+[m[32m        item.save(update_fields=["attribute"])[m[41m  [m
+[32m+[m[32m        print(f"✅ Updated: {item.product.title} -> {default_attribute}")[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        print(f"⚠️ No matching attribute found for {item.product.title}")[m
+[32m+[m
+[1mdiff --git a/fyp/fyp/__init__.py b/fyp/fyp/__init__.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e69de29[m
+[1mdiff --git a/fyp/fyp/asgi.py b/fyp/fyp/asgi.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9398b2f[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fyp/asgi.py[m
+[36m@@ -0,0 +1,16 @@[m
+[32m+[m[32m"""[m
+[32m+[m[32mASGI config for fyp project.[m
+[32m+[m
+[32m+[m[32mIt exposes the ASGI callable as a module-level variable named ``application``.[m
+[32m+[m
+[32m+[m[32mFor more information on this file, see[m
+[32m+[m[32mhttps://docs.djangoproject.com/en/5.1/howto/deployment/asgi/[m
+[32m+[m[32m"""[m
+[32m+[m
+[32m+[m[32mimport os[m
+[32m+[m
+[32m+[m[32mfrom django.core.asgi import get_asgi_application[m
+[32m+[m
+[32m+[m[32mos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fyp.settings')[m
+[32m+[m
+[32m+[m[32mapplication = get_asgi_application()[m
+[1mdiff --git a/fyp/fyp/settings.py b/fyp/fyp/settings.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9d4e9a4[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fyp/settings.py[m
+[36m@@ -0,0 +1,144 @@[m
+[32m+[m[32m"""[m
+[32m+[m[32mDjango settings for fyp project.[m
+[32m+[m
+[32m+[m[32mGenerated by 'django-admin startproject' using Django 5.1.6.[m
+[32m+[m
+[32m+[m[32mFor more information on this file, see[m
+[32m+[m[32mhttps://docs.djangoproject.com/en/5.1/topics/settings/[m
+[32m+[m
+[32m+[m[32mFor the full list of settings and their values, see[m
+[32m+[m[32mhttps://docs.djangoproject.com/en/5.1/ref/settings/[m
+[32m+[m[32m"""[m
+[32m+[m
+[32m+[m[32mfrom pathlib import Path[m
+[32m+[m[32mimport os[m
+[32m+[m
+[32m+[m[32m# Build paths inside the project like this: BASE_DIR / 'subdir'.[m
+[32m+[m[32mBASE_DIR = Path(__file__).resolve().parent.parent[m
+[32m+[m
+[32m+[m[32m# Quick-start development settings - unsuitable for production[m
+[32m+[m[32m# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/[m
+[32m+[m
+[32m+[m[32m# SECURITY WARNING: keep the secret key used in production secret![m
+[32m+[m[32mSECRET_KEY = 'django-insecure-0hlkcl8hjnf34(^_ftp3khmv9mba67*xhte885-s+r@_f$6(4o'[m
+[32m+[m
+[32m+[m[32m# SECURITY WARNING: don't run with debug turned on in production![m
+[32m+[m[32mDEBUG = True[m
+[32m+[m
+[32m+[m[32mALLOWED_HOSTS = [][m
+[32m+[m
+[32m+[m[32m# Application definition[m
+[32m+[m
+[32m+[m[32mINSTALLED_APPS = [[m
+[32m+[m[32m    'django.contrib.admin',[m
+[32m+[m[32m    'django.contrib.auth',[m
+[32m+[m[32m    'django.contrib.contenttypes',[m
+[32m+[m[32m    'django.contrib.sessions',[m
+[32m+[m[32m    'django.contrib.messages',[m
+[32m+[m[32m    'django.contrib.staticfiles',[m
+[32m+[m[32m    'fypapp',[m
+[32m+[m[32m    'corsheaders',[m
+[32m+[m[32m][m
+[32m+[m
+[32m+[m[32mMIDDLEWARE = [[m
+[32m+[m[32m    'django.middleware.security.SecurityMiddleware',[m
+[32m+[m[32m    'django.contrib.sessions.middleware.SessionMiddleware',[m
+[32m+[m[32m    'django.middleware.common.CommonMiddleware',[m
+[32m+[m[32m    'django.middleware.csrf.CsrfViewMiddleware',[m
+[32m+[m[32m    'django.contrib.auth.middleware.AuthenticationMiddleware',[m
+[32m+[m[32m    'django.contrib.messages.middleware.MessageMiddleware',[m
+[32m+[m[32m    'django.middleware.clickjacking.XFrameOptionsMiddleware',[m
+[32m+[m[32m    'corsheaders.middleware.CorsMiddleware',[m
+[32m+[m[32m][m
+[32m+[m
+[32m+[m[32mROOT_URLCONF = 'fyp.urls'[m
+[32m+[m
+[32m+[m[32mTEMPLATES = [[m
+[32m+[m[32m    {[m
+[32m+[m[32m        'BACKEND': 'django.template.backends.django.DjangoTemplates',[m
+[32m+[m[32m        'DIRS': [os.path.join(BASE_DIR, 'fypapp/templates')],[m
+[32m+[m[32m        'APP_DIRS': True,[m
+[32m+[m[32m        'OPTIONS': {[m
+[32m+[m[32m            'context_processors': [[m
+[32m+[m[32m                'django.template.context_processors.debug',[m
+[32m+[m[32m                'django.template.context_processors.request',[m
+[32m+[m[32m                'django.contrib.auth.context_processors.auth',[m
+[32m+[m[32m                'django.contrib.messages.context_processors.messages',[m
+[32m+[m[32m                'fypapp.context_processors.brand_list',[m
+[32m+[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        },[m
+[32m+[m[32m    },[m
+[32m+[m[32m][m
+[32m+[m
+[32m+[m[32mWSGI_APPLICATION = 'fyp.wsgi.application'[m
+[32m+[m
+[32m+[m[32m# Database[m
+[32m+[m[32m# https://docs.djangoproject.com/en/5.1/ref/settings/#databases[m
+[32m+[m
+[32m+[m[32mDATABASES = {[m
+[32m+[m[32m    'default': {[m
+[32m+[m[32m        'ENGINE': 'django.db.backends.sqlite3',[m
+[32m+[m[32m        'NAME': BASE_DIR / 'db.sqlite3',[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m# Password validation[m
+[32m+[m[32m# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators[m
+[32m+[m
+[32m+[m[32mAUTH_PASSWORD_VALIDATORS = [[m
+[32m+[m[32m    {[m
+[32m+[m[32m        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',[m
+[32m+[m[32m    },[m
+[32m+[m[32m    {[m
+[32m+[m[32m        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',[m
+[32m+[m[32m    },[m
+[32m+[m[32m    {[m
+[32m+[m[32m        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',[m
+[32m+[m[32m    },[m
+[32m+[m[32m    {[m
+[32m+[m[32m        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',[m
+[32m+[m[32m    },[m
+[32m+[m[32m][m
+[32m+[m
+[32m+[m[32m# Internationalization[m
+[32m+[m[32m# https://docs.djangoproject.com/en/5.1/topics/i18n/[m
+[32m+[m
+[32m+[m[32mLANGUAGE_CODE = 'en-us'[m
+[32m+[m
+[32m+[m[32mTIME_ZONE = 'UTC'[m
+[32m+[m
+[32m+[m[32mUSE_I18N = True[m
+[32m+[m
+[32m+[m[32mUSE_TZ = True[m
+[32m+[m
+[32m+[m[32m# Static files (CSS, JavaScript, Images)[m
+[32m+[m[32m# https://docs.djangoproject.com/en/5.1/howto/static-files/[m
+[32m+[m
+[32m+[m[32mSTATIC_URL = '/static/'[m
+[32m+[m[32mSTATICFILES_DIRS = [BASE_DIR / 'static'][m[41m  [m
+[32m+[m[32mSTATIC_ROOT = BASE_DIR / 'staticfiles'[m[41m  [m
+[32m+[m[32mSTATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'[m
+[32m+[m[32m# Media files[m
+[32m+[m[32mMEDIA_URL = '/media/'[m
+[32m+[m[32mMEDIA_ROOT = os.path.join(BASE_DIR, 'media')[m
+[32m+[m
+[32m+[m[32m# Default primary key field type[m
+[32m+[m[32m# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field[m
+[32m+[m
+[32m+[m[32mDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'[m
+[32m+[m
+[32m+[m[32m# Authentication settings[m
+[32m+[m[32mLOGIN_REDIRECT_URL = 'ecommerce'[m
+[32m+[m[32mLOGOUT_REDIRECT_URL = 'ecommerce'[m
+[32m+[m[32mAUTH_USER_MODEL = 'fypapp.CustomUser'[m
+[32m+[m[32mCSRF_TRUSTED_ORIGINS = [[m
+[32m+[m[32m    "http://127.0.0.1",[m
+[32m+[m[32m    "http://localhost",[m
+[32m+[m[32m    "https://yourdomain.com",  # Add your domain if deploying[m
+[32m+[m[32m][m
+[32m+[m[32mAUTHENTICATION_BACKENDS = [[m
+[32m+[m[32m    'django.contrib.auth.backends.ModelBackend',[m
+[32m+[m[32m][m
+[32m+[m[32mSTRIPE_PUBLIC_KEY = 'pk_test_51RGCqoQMAli56deWN2LmzRRUEgsB7fmtEVGhSjcyW9mSByHJcwH1rk19kC3icFm82wgg8a9Ab55k4GXNnW8B5tBu00kMoEeaNW'[m[41m  [m
+[32m+[m[32mSTRIPE_SECRET_KEY = '***REMOVED***51RGCqoQMAli56deWGQbVEexVNtPNCxoRxm3PKv370eVDgawz9EW196FVaxV0pOcZlI2taOg0GXeDsOXMV0LW2V6y00DXgsta4Y'[m
+[1mdiff --git a/fyp/fyp/urls.py b/fyp/fyp/urls.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e77925e[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fyp/urls.py[m
+[36m@@ -0,0 +1,25 @@[m
+[32m+[m[32m"""[m
+[32m+[m[32mURL configuration for fyp project.[m
+[32m+[m
+[32m+[m[32mThe `urlpatterns` list routes URLs to views. For more information please see:[m
+[32m+[m[32m    https://docs.djangoproject.com/en/5.1/topics/http/urls/[m
+[32m+[m[32mExamples:[m
+[32m+[m[32mFunction views[m
+[32m+[m[32m    1. Add an import:  from my_app import views[m
+[32m+[m[32m    2. Add a URL to urlpatterns:  path('', views.home, name='home')[m
+[32m+[m[32mClass-based views[m
+[32m+[m[32m    1. Add an import:  from other_app.views import Home[m
+[32m+[m[32m    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')[m
+[32m+[m[32mIncluding another URLconf[m
+[32m+[m[32m    1. Import the include() function: from django.urls import include, path[m
+[32m+[m[32m    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))[m
+[32m+[m[32m"""[m
+[32m+[m[32mfrom django.contrib import admin[m
+[32m+[m[32mfrom django.urls import path, include[m
+[32m+[m
+[32m+[m[32murlpatterns = [[m
+[32m+[m[32m    path('admin/', admin.site.urls),[m
+[32m+[m[32m    path('', include('fypapp.urls')),[m
+[32m+[m[32m    path('accounts/', include('django.contrib.auth.urls')),[m
+[32m+[m[41m    [m
+[32m+[m[32m][m
+[1mdiff --git a/fyp/fyp/wsgi.py b/fyp/fyp/wsgi.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e3eaf97[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fyp/wsgi.py[m
+[36m@@ -0,0 +1,16 @@[m
+[32m+[m[32m"""[m
+[32m+[m[32mWSGI config for fyp project.[m
+[32m+[m
+[32m+[m[32mIt exposes the WSGI callable as a module-level variable named ``application``.[m
+[32m+[m
+[32m+[m[32mFor more information on this file, see[m
+[32m+[m[32mhttps://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/[m
+[32m+[m[32m"""[m
+[32m+[m
+[32m+[m[32mimport os[m
+[32m+[m
+[32m+[m[32mfrom django.core.wsgi import get_wsgi_application[m
+[32m+[m
+[32m+[m[32mos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fyp.settings')[m
+[32m+[m
+[32m+[m[32mapplication = get_wsgi_application()[m
+[1mdiff --git a/fyp/fypapp/__init__.py b/fyp/fypapp/__init__.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e69de29[m
+[1mdiff --git a/fyp/fypapp/admin.py b/fyp/fypapp/admin.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8447a4f[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/admin.py[m
+[36m@@ -0,0 +1,28 @@[m
+[32m+[m
+[32m+[m[32mfrom django.contrib import admin[m
+[32m+[m[32mfrom .models import *[m
+[32m+[m
+[32m+[m
+[32m+[m[32madmin.site.register(Brands)[m
+[32m+[m
+[32m+[m[32mclass CategoryAdmin(admin.ModelAdmin):[m
+[32m+[m[32m    list_display = ['title', 'image_tag'][m
+[32m+[m[32madmin.site.register(Category, CategoryAdmin)[m
+[32m+[m
+[32m+[m[32mclass ProductAdmin(admin.ModelAdmin):[m
+[32m+[m[32m    list_display = ['title', 'category','processor', 'brand','image_tag','status','is_featured'][m
+[32m+[m[32m    list_editable = ['status','is_featured'][m
+[32m+[m[32madmin.site.register(Products, ProductAdmin)[m
+[32m+[m
+[32m+[m[32mclass RamAdmin(admin.ModelAdmin):[m
+[32m+[m[32m    list_display = ['ram'][m
+[32m+[m[32madmin.site.register(Ram, RamAdmin)[m
+[32m+[m
+[32m+[m[32mclass StorageAdmin(admin.ModelAdmin):[m
+[32m+[m[32m    list_display = ['storage'][m
+[32m+[m[32madmin.site.register(Storage, StorageAdmin)[m
+[32m+[m
+[32m+[m[32mclass ProductAttributeAdmin(admin.ModelAdmin):[m
+[32m+[m[32m    list_display = ['id', 'product', 'ram','storage', 'price'][m
+[32m+[m
+[32m+[m[32madmin.site.register(ProductAttribute, ProductAttributeAdmin)[m[41m [m
+[1mdiff --git a/fyp/fypapp/apps.py b/fyp/fypapp/apps.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..796c313[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/apps.py[m
+[36m@@ -0,0 +1,25 @@[m
+[32m+[m[32mfrom django.apps import AppConfig[m
+[32m+[m[32mfrom django.apps import AppConfig[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass FypappConfig(AppConfig):[m
+[32m+[m[32m    default_auto_field = 'django.db.models.BigAutoField'[m
+[32m+[m[32m    name = 'fypapp'[m
+[32m+[m
+[32m+[m[32mclass FypappConfig(AppConfig):[m
+[32m+[m[32m    default_auto_field = 'django.db.models.BigAutoField'[m
+[32m+[m[32m    name = 'fypapp'[m
+[32m+[m
+[32m+[m[32m    def ready(self):[m
+[32m+[m[32m        import fypapp.signals[m[41m [m
+[32m+[m
+[32m+[m
+[32m+[m[32mfrom django.apps import AppConfig[m
+[32m+[m
+[32m+[m[32mclass FypappConfig(AppConfig):[m
+[32m+[m[32m    default_auto_field = 'django.db.models.BigAutoField'[m
+[32m+[m[32m    name = 'fypapp'[m
+[32m+[m
+[32m+[m[32m    def ready(self):[m
+[32m+[m[32m        import fypapp.signals  # Ensure signals are loaded[m
+[32m+[m
+[1mdiff --git a/fyp/fypapp/cart_fix.py b/fyp/fypapp/cart_fix.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c6cf167[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/cart_fix.py[m
+[36m@@ -0,0 +1,51 @@[m
+[32m+[m[32m# cart_fix.py - Place this in your Django app directory[m
+[32m+[m[32mfrom django.http import JsonResponse[m
+[32m+[m[32mfrom django.contrib.auth.decorators import login_required[m
+[32m+[m[32mfrom django.views.decorators.http import require_POST[m
+[32m+[m[32mfrom .models import CartItem  # Update this import if your model is different[m
+[32m+[m
+[32m+[m[32m@login_required[m
+[32m+[m[32m@require_POST[m
+[32m+[m[32mdef remove_all_from_cart(request, product_id, attribute_id):[m
+[32m+[m[32m    """[m
+[32m+[m[32m    Removes ALL cart items matching the given product_id and attribute_id.[m
+[32m+[m[32m    This function is specifically designed to handle the case where multiple items exist.[m
+[32m+[m[32m    """[m
+[32m+[m[32m    try:[m
+[32m+[m[32m        # Get all matching cart items (could be multiple)[m
+[32m+[m[32m        items = CartItem.objects.filter([m
+[32m+[m[32m            user=request.user,[m
+[32m+[m[32m            product_id=product_id,[m
+[32m+[m[32m            attribute_id=attribute_id[m
+[32m+[m[32m        )[m
+[32m+[m[41m        [m
+[32m+[m[32m        # Check if any items were found[m
+[32m+[m[32m        if items.exists():[m
+[32m+[m[32m            # Get the count before deletion for the message[m
+[32m+[m[32m            count = items.count()[m
+[32m+[m[32m            # Delete all matching items at once[m
+[32m+[m[32m            items.delete()[m
+[32m+[m[41m            [m
+[32m+[m[32m            # Get updated cart count[m
+[32m+[m[32m            cart_count = CartItem.objects.filter(user=request.user).count()[m
+[32m+[m[41m            [m
+[32m+[m[32m            return JsonResponse({[m
+[32m+[m[32m                'success': True,[m
+[32m+[m[32m                'message': f'{count} item(s) removed from cart',[m
+[32m+[m[32m                'cart_count': cart_count[m
+[32m+[m[32m            })[m
+[32m+[m[32m        else:[m
+[32m+[m[32m            return JsonResponse({[m
+[32m+[m[32m                'success': False,[m
+[32m+[m[32m                'message': 'Item not found in cart'[m
+[32m+[m[32m            })[m
+[32m+[m[32m    except Exception as e:[m
+[32m+[m[32m        # Log the error for debugging[m
+[32m+[m[32m        import traceback[m
+[32m+[m[32m        print(f"Error removing from cart: {str(e)}")[m
+[32m+[m[32m        print(traceback.format_exc())[m
+[32m+[m[41m        [m
+[32m+[m[32m        return JsonResponse({[m
+[32m+[m[32m            'success': False,[m
+[32m+[m[32m            'message': f'Error: {str(e)}'[m
+[32m+[m[32m        }, status=500)[m
+\ No newline at end of file[m
+[1mdiff --git a/fyp/fypapp/context_processors.py b/fyp/fypapp/context_processors.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..357bfca[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/context_processors.py[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32mfrom .models import Brands[m
+[32m+[m
+[32m+[m[32mdef brand_list(request):[m
+[32m+[m[32m    brands = Brands.objects.all()[m
+[32m+[m[32m    return {'brands': brands}[m
+\ No newline at end of file[m
+[1mdiff --git a/fyp/fypapp/debugging_cart.py b/fyp/fypapp/debugging_cart.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a2e4970[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/debugging_cart.py[m
+[36m@@ -0,0 +1,42 @@[m
+[32m+[m[32m# Add this to your Django app to help debug the issue[m
+[32m+[m[32mfrom django.http import HttpResponse[m
+[32m+[m[32mfrom django.contrib.auth.decorators import login_required[m
+[32m+[m[32mfrom django.views.decorators.http import require_POST[m
+[32m+[m[32mfrom .models import CartItem  # Update this import if your model is different[m
+[32m+[m
+[32m+[m[32m@login_required[m
+[32m+[m[32m@require_POST[m
+[32m+[m[32mdef debug_cart_removal(request, product_id, attribute_id):[m
+[32m+[m[32m    """[m
+[32m+[m[32m    Debug function to examine exactly what's happening during cart item removal.[m
+[32m+[m[32m    """[m
+[32m+[m[32m    debug_info = [][m
+[32m+[m[32m    debug_info.append(f"User: {request.user.username}")[m
+[32m+[m[32m    debug_info.append(f"Product ID: {product_id}")[m
+[32m+[m[32m    debug_info.append(f"Attribute ID: {attribute_id}")[m
+[32m+[m[41m    [m
+[32m+[m[32m    try:[m
+[32m+[m[32m        # First, check if any items match our criteria[m
+[32m+[m[32m        matching_items = CartItem.objects.filter([m
+[32m+[m[32m            user=request.user,[m
+[32m+[m[32m            product_id=product_id,[m
+[32m+[m[32m            attribute_id=attribute_id[m
+[32m+[m[32m        )[m
+[32m+[m[41m        [m
+[32m+[m[32m        debug_info.append(f"Found {matching_items.count()} matching item(s):")[m
+[32m+[m[41m        [m
+[32m+[m[32m        # List all matching items[m
+[32m+[m[32m        for i, item in enumerate(matching_items):[m
+[32m+[m[32m            debug_info.append(f"Item {i+1}: ID={item.id}, Product={item.product}, Attribute={item.attribute}")[m
+[32m+[m[41m        [m
+[32m+[m[32m        # Try to delete them[m
+[32m+[m[32m        matching_items.delete()[m
+[32m+[m[32m        debug_info.append("Items deleted successfully")[m
+[32m+[m[41m        [m
+[32m+[m[32m    except Exception as e:[m
+[32m+[m[32m        import traceback[m
+[32m+[m[32m        debug_info.append(f"ERROR: {str(e)}")[m
+[32m+[m[32m        debug_info.append(traceback.format_exc())[m
+[32m+[m[41m    [m
+[32m+[m[32m    # Return all debug info as plain text[m
+[32m+[m[32m    return HttpResponse("<br>".join(debug_info), content_type="text/plain")[m
+\ No newline at end of file[m
+[1mdiff --git a/fyp/fypapp/forms.py b/fyp/fypapp/forms.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..49729d6[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/forms.py[m
+[36m@@ -0,0 +1,75 @@[m
+[32m+[m[32mfrom django import forms[m
+[32m+[m[32mfrom django.contrib.auth.forms import AuthenticationForm, UserCreationForm[m
+[32m+[m[32mfrom django.contrib.auth import get_user_model[m
+[32m+[m
+[32m+[m[32mCustomUser = get_user_model()[m[41m  [m
+[32m+[m
+[32m+[m[41m [m
+[32m+[m[32m# 🔹 SIGN-UP FORM[m
+[32m+[m
+[32m+[m[32mclass SignUpForm(forms.ModelForm):[m
+[32m+[m[32m    password = forms.CharField(widget=forms.PasswordInput)[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        model = CustomUser[m
+[32m+[m[32m        fields = ['email', 'password'][m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# 🔹 CUSTOM USER CREATION FORM[m
+[32m+[m
+[32m+[m[32mclass CustomUserCreationForm(UserCreationForm):[m
+[32m+[m[32m    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={[m
+[32m+[m[32m        'class': 'form-control',[m
+[32m+[m[32m        'placeholder': 'Email Address',[m
+[32m+[m[32m        'required': 'required',[m
+[32m+[m[32m        'autocomplete': 'off'[m
+[32m+[m[32m    }))[m
+[32m+[m
+[32m+[m[32m    password1 = forms.CharField(widget=forms.PasswordInput(attrs={[m
+[32m+[m[32m        'class': 'form-control',[m
+[32m+[m[32m        'placeholder': 'Password',[m
+[32m+[m[32m        'required': 'required',[m
+[32m+[m[32m        'autocomplete': 'off'[m
+[32m+[m[32m    }))[m
+[32m+[m[41m    [m
+[32m+[m[32m    password2 = forms.CharField(widget=forms.PasswordInput(attrs={[m
+[32m+[m[32m        'class': 'form-control',[m
+[32m+[m[32m        'placeholder': 'Confirm Password',[m
+[32m+[m[32m        'required': 'required',[m
+[32m+[m[32m        'autocomplete': 'off'[m
+[32m+[m[32m    }))[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        model = CustomUser[m[41m  [m
+[32m+[m[32m        fields = ['email', 'password1', 'password2'][m
+[32m+[m
+[32m+[m[32m    def save(self, commit=True):[m
+[32m+[m[32m        user = super().save(commit=False)[m
+[32m+[m[32m        user.set_password(self.cleaned_data['password1'])[m[41m [m
+[32m+[m[32m        if commit:[m
+[32m+[m[32m            user.save()[m
+[32m+[m[32m        return user[m
+[32m+[m[32m    def clean_email(self):[m
+[32m+[m[32m        email = self.cleaned_data['email'][m
+[32m+[m[32m        if CustomUser.objects.filter(email=email).exists():[m
+[32m+[m[32m            raise forms.ValidationError("This email is already in use.")[m
+[32m+[m[32m        return email[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# 🔹 CUSTOM LOGIN FORM[m
+[32m+[m
+[32m+[m[32mclass CustomAuthenticationForm(AuthenticationForm):[m
+[32m+[m[32m    username = forms.EmailField(widget=forms.EmailInput(attrs={[m[41m  [m
+[32m+[m[32m        'class': 'form-control',[m
+[32m+[m[32m        'placeholder': 'Email',[m[41m  [m
+[32m+[m[32m        'required': 'required',[m
+[32m+[m[32m        'autocomplete': 'off'[m
+[32m+[m[32m    }))[m
+[32m+[m
+[32m+[m[32m    password = forms.CharField(widget=forms.PasswordInput(attrs={[m
+[32m+[m[32m        'class': 'form-control',[m
+[32m+[m[32m        'placeholder': 'Password',[m
+[32m+[m[32m        'required': 'required',[m
+[32m+[m[32m        'autocomplete': 'off'[m
+[32m+[m[32m    }))[m
+[1mdiff --git a/fyp/fypapp/management/commands/import_laptops.py b/fyp/fypapp/management/commands/import_laptops.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c16d3c4[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/management/commands/import_laptops.py[m
+[36m@@ -0,0 +1,45 @@[m
+[32m+[m[32m# from bs4 import BeautifulSoup[m
+[32m+[m[32m# import os[m
+[32m+[m[32m# from django.core.files import File[m
+[32m+[m[32m# from django.conf import settings[m
+[32m+[m[32m# from fypapp.models import Laptop[m
+[32m+[m
+[32m+[m[32m# # Load the HTML file[m
+[32m+[m[32m# html_file_path = os.path.join(settings.BASE_DIR, "path_to_extracted_html_file.html")[m
+[32m+[m[32m# with open(html_file_path, "r", encoding="utf-8") as file:[m
+[32m+[m[32m#     soup = BeautifulSoup(file, "html.parser")[m
+[32m+[m
+[32m+[m[32m# # Find all cards[m
+[32m+[m[32m# cards = soup.find_all("div", class_="card")[m
+[32m+[m
+[32m+[m[32m# for card in cards:[m
+[32m+[m[32m#     name = card.find("div", class_="name").text.strip()[m
+[32m+[m[32m#     specs = card.find("p").text.strip().split("\n")[m
+[32m+[m[41m    [m
+[32m+[m[32m#     # Extract specs[m
+[32m+[m[32m#     processor = specs[0].split(":")[-1].strip()[m
+[32m+[m[32m#     ram = specs[1].split(":")[-1].strip()[m
+[32m+[m[32m#     storage = specs[2].split(":")[-1].strip()[m
+[32m+[m
+[32m+[m[32m#     price_text = card.find("div", class_="price").text.strip()[m
+[32m+[m[32m#     price = float(price_text.split("$")[-1])[m
+[32m+[m
+[32m+[m[32m#     img_tag = card.find("img")[m
+[32m+[m[32m#     image_path = img_tag["src"] if img_tag else ""[m
+[32m+[m
+[32m+[m[32m#     # Save to database[m
+[32m+[m[32m#     laptop = Laptop([m
+[32m+[m[32m#         name=name,[m
+[32m+[m[32m#         processor=processor,[m
+[32m+[m[32m#         ram=ram,[m
+[32m+[m[32m#         storage=storage,[m
+[32m+[m[32m#         price=price,[m
+[32m+[m[32m#     )[m
+[32m+[m
+[32m+[m[32m#     # Save image if applicable[m
+[32m+[m[32m#     if image_path:[m
+[32m+[m[32m#         image_name = os.path.basename(image_path)[m
+[32m+[m[32m#         laptop.image.save(image_name, File(open(image_path, "rb")))[m
+[32m+[m
+[32m+[m[32m#     laptop.save()[m
+[32m+[m[32m#     print(f"Saved {name} to database.")[m
+[1mdiff --git a/fyp/fypapp/migrations/0001_initial.py b/fyp/fypapp/migrations/0001_initial.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c90fc2a[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0001_initial.py[m
+[36m@@ -0,0 +1,110 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-03 08:36[m
+[32m+[m
+[32m+[m[32mimport django.db.models.deletion[m
+[32m+[m[32mimport django.utils.timezone[m
+[32m+[m[32mfrom django.conf import settings[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    initial = True[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('auth', '0012_alter_user_first_name_max_length'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='Brands',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('title', models.CharField(max_length=100)),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='Category',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('title', models.CharField(max_length=100)),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='Ram',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('ram', models.CharField(max_length=50)),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='Storage',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('storage', models.CharField(max_length=50)),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='CustomUser',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('password', models.CharField(max_length=128, verbose_name='password')),[m
+[32m+[m[32m                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),[m
+[32m+[m[32m                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),[m
+[32m+[m[32m                ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),[m
+[32m+[m[32m                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),[m
+[32m+[m[32m                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),[m
+[32m+[m[32m                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),[m
+[32m+[m[32m                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),[m
+[32m+[m[32m                ('email', models.EmailField(max_length=254, unique=True)),[m
+[32m+[m[32m                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),[m
+[32m+[m[32m                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m            options={[m
+[32m+[m[32m                'verbose_name': 'user',[m
+[32m+[m[32m                'verbose_name_plural': 'users',[m
+[32m+[m[32m                'abstract': False,[m
+[32m+[m[32m            },[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='Products',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('image', models.ImageField(upload_to='product-images/')),[m
+[32m+[m[32m                ('title', models.CharField(default='Default Title', max_length=100)),[m
+[32m+[m[32m                ('slug', models.CharField(max_length=400)),[m
+[32m+[m[32m                ('processor', models.CharField(max_length=100)),[m
+[32m+[m[32m                ('status', models.BooleanField(default=True)),[m
+[32m+[m[32m                ('is_featured', models.BooleanField(default=False)),[m
+[32m+[m[32m                ('brand', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fypapp.brands')),[m
+[32m+[m[32m                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fypapp.category')),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='CartItem',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('quantity', models.PositiveIntegerField(default=1)),[m
+[32m+[m[32m                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),[m
+[32m+[m[32m                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fypapp.products')),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='ProductAttribute',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('price', models.DecimalField(decimal_places=2, max_digits=10)),[m
+[32m+[m[32m                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fypapp.products')),[m
+[32m+[m[32m                ('ram', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fypapp.ram')),[m
+[32m+[m[32m                ('storage', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fypapp.storage')),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='WishlistItem',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('added_at', models.DateTimeField(default=django.utils.timezone.now)),[m
+[32m+[m[32m                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fypapp.products')),[m
+[32m+[m[32m                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0002_alter_brands_options_alter_category_options_and_more.py b/fyp/fypapp/migrations/0002_alter_brands_options_alter_category_options_and_more.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e1914c1[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0002_alter_brands_options_alter_category_options_and_more.py[m
+[36m@@ -0,0 +1,43 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-06 04:59[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0001_initial'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='brands',[m
+[32m+[m[32m            options={'verbose_name_plural': '2. Brands'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='category',[m
+[32m+[m[32m            options={'verbose_name_plural': '1. Categories'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='products',[m
+[32m+[m[32m            options={'verbose_name_plural': '3. Products'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='ram',[m
+[32m+[m[32m            options={'verbose_name_plural': '4. Ram'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='storage',[m
+[32m+[m[32m            options={'verbose_name_plural': '5. Stoarge'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AddField([m
+[32m+[m[32m            model_name='brands',[m
+[32m+[m[32m            name='image',[m
+[32m+[m[32m            field=models.ImageField(blank=True, null=True, upload_to='category_images/'),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AddField([m
+[32m+[m[32m            model_name='category',[m
+[32m+[m[32m            name='image',[m
+[32m+[m[32m            field=models.ImageField(blank=True, null=True, upload_to='category_images/'),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0002_auto_20250402_1642.py b/fyp/fypapp/migrations/0002_auto_20250402_1642.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9e7a870[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0002_auto_20250402_1642.py[m
+[36m@@ -0,0 +1,13 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-04-02 11:42[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0001_initial'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0003_alter_category_options_alter_category_image.py b/fyp/fypapp/migrations/0003_alter_category_options_alter_category_image.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8aa2dc5[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0003_alter_category_options_alter_category_image.py[m
+[36m@@ -0,0 +1,22 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-06 05:11[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0002_alter_brands_options_alter_category_options_and_more'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='category',[m
+[32m+[m[32m            options={'verbose_name_plural': '2. Categories'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AlterField([m
+[32m+[m[32m            model_name='category',[m
+[32m+[m[32m            name='image',[m
+[32m+[m[32m            field=models.ImageField(upload_to='cat_imgs/'),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0004_alter_category_image.py b/fyp/fypapp/migrations/0004_alter_category_image.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..6183238[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0004_alter_category_image.py[m
+[36m@@ -0,0 +1,18 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-06 05:53[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0003_alter_category_options_alter_category_image'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterField([m
+[32m+[m[32m            model_name='category',[m
+[32m+[m[32m            name='image',[m
+[32m+[m[32m            field=models.ImageField(blank=True, null=True, upload_to='cat_imgs/'),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0005_alter_products_title.py b/fyp/fypapp/migrations/0005_alter_products_title.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..172220b[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0005_alter_products_title.py[m
+[36m@@ -0,0 +1,18 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-06 11:36[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0004_alter_category_image'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterField([m
+[32m+[m[32m            model_name='products',[m
+[32m+[m[32m            name='title',[m
+[32m+[m[32m            field=models.CharField(max_length=100, unique=True),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0006_alter_category_options_brands_slug.py b/fyp/fypapp/migrations/0006_alter_category_options_brands_slug.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e848be5[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0006_alter_category_options_brands_slug.py[m
+[36m@@ -0,0 +1,22 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-09 08:00[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0005_alter_products_title'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='category',[m
+[32m+[m[32m            options={'verbose_name_plural': '1. Categories'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AddField([m
+[32m+[m[32m            model_name='brands',[m
+[32m+[m[32m            name='slug',[m
+[32m+[m[32m            field=models.SlugField(blank=True, null=True, unique=True),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0007_alter_category_options_remove_brands_slug.py b/fyp/fypapp/migrations/0007_alter_category_options_remove_brands_slug.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..94e8b42[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0007_alter_category_options_remove_brands_slug.py[m
+[36m@@ -0,0 +1,21 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-09 11:01[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0006_alter_category_options_brands_slug'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='category',[m
+[32m+[m[32m            options={'verbose_name_plural': '2. Categories'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.RemoveField([m
+[32m+[m[32m            model_name='brands',[m
+[32m+[m[32m            name='slug',[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0008_productattribute_image.py b/fyp/fypapp/migrations/0008_productattribute_image.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1a2d633[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0008_productattribute_image.py[m
+[36m@@ -0,0 +1,18 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-10 07:39[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0007_alter_category_options_remove_brands_slug'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AddField([m
+[32m+[m[32m            model_name='productattribute',[m
+[32m+[m[32m            name='image',[m
+[32m+[m[32m            field=models.ImageField(null=True, upload_to='product_imgs/'),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0009_alter_category_options_and_more.py b/fyp/fypapp/migrations/0009_alter_category_options_and_more.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..d34912c[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0009_alter_category_options_and_more.py[m
+[36m@@ -0,0 +1,25 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-10 07:44[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0008_productattribute_image'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='category',[m
+[32m+[m[32m            options={'verbose_name_plural': '1. Categories'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='productattribute',[m
+[32m+[m[32m            options={'verbose_name_plural': '6. Products_attribute'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.RemoveField([m
+[32m+[m[32m            model_name='productattribute',[m
+[32m+[m[32m            name='image',[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0010_products_is_new.py b/fyp/fypapp/migrations/0010_products_is_new.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..ab47c5f[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0010_products_is_new.py[m
+[36m@@ -0,0 +1,18 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-11 05:04[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0009_alter_category_options_and_more'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AddField([m
+[32m+[m[32m            model_name='products',[m
+[32m+[m[32m            name='is_new',[m
+[32m+[m[32m            field=models.BooleanField(default=False),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0011_alter_productattribute_price.py b/fyp/fypapp/migrations/0011_alter_productattribute_price.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e60e5af[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0011_alter_productattribute_price.py[m
+[36m@@ -0,0 +1,18 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-12 06:15[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0010_products_is_new'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterField([m
+[32m+[m[32m            model_name='productattribute',[m
+[32m+[m[32m            name='price',[m
+[32m+[m[32m            field=models.IntegerField(),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0012_product_remove_cartitem_user_alter_cartitem_product.py b/fyp/fypapp/migrations/0012_product_remove_cartitem_user_alter_cartitem_product.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..117a435[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0012_product_remove_cartitem_user_alter_cartitem_product.py[m
+[36m@@ -0,0 +1,31 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-24 07:11[m
+[32m+[m
+[32m+[m[32mimport django.db.models.deletion[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0011_alter_productattribute_price'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='Product',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('name', models.CharField(max_length=255)),[m
+[32m+[m[32m                ('price', models.DecimalField(decimal_places=2, max_digits=10)),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.RemoveField([m
+[32m+[m[32m            model_name='cartitem',[m
+[32m+[m[32m            name='user',[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AlterField([m
+[32m+[m[32m            model_name='cartitem',[m
+[32m+[m[32m            name='product',[m
+[32m+[m[32m            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fypapp.product'),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0013_alter_cartitem_product_and_more.py b/fyp/fypapp/migrations/0013_alter_cartitem_product_and_more.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..21a344a[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0013_alter_cartitem_product_and_more.py[m
+[36m@@ -0,0 +1,41 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-24 12:03[m
+[32m+[m
+[32m+[m[32mimport django.db.models.deletion[m
+[32m+[m[32mfrom django.conf import settings[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0012_product_remove_cartitem_user_alter_cartitem_product'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterField([m
+[32m+[m[32m            model_name='cartitem',[m
+[32m+[m[32m            name='product',[m
+[32m+[m[32m            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fypapp.products'),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='productattribute',[m
+[32m+[m[32m            options={'verbose_name_plural': '6. Products Attribute'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AlterModelOptions([m
+[32m+[m[32m            name='storage',[m
+[32m+[m[32m            options={'verbose_name_plural': '5. Storage'},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AddField([m
+[32m+[m[32m            model_name='cartitem',[m
+[32m+[m[32m            name='attribute',[m
+[32m+[m[32m            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='fypapp.productattribute'),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.AddField([m
+[32m+[m[32m            model_name='cartitem',[m
+[32m+[m[32m            name='user',[m
+[32m+[m[32m            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        migrations.DeleteModel([m
+[32m+[m[32m            name='Product',[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0014_remove_cartitem_quantity.py b/fyp/fypapp/migrations/0014_remove_cartitem_quantity.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..fdad421[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0014_remove_cartitem_quantity.py[m
+[36m@@ -0,0 +1,17 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-03-25 06:28[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0013_alter_cartitem_product_and_more'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.RemoveField([m
+[32m+[m[32m            model_name='cartitem',[m
+[32m+[m[32m            name='quantity',[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0015_cart.py b/fyp/fypapp/migrations/0015_cart.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0fdbb34[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0015_cart.py[m
+[36m@@ -0,0 +1,26 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-04-02 12:06[m
+[32m+[m
+[32m+[m[32mimport django.db.models.deletion[m
+[32m+[m[32mfrom django.conf import settings[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0014_remove_cartitem_quantity'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='Cart',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('product_id', models.IntegerField()),[m
+[32m+[m[32m                ('attribute_id', models.IntegerField()),[m
+[32m+[m[32m                ('quantity', models.PositiveIntegerField(default=1)),[m
+[32m+[m[32m                ('added_at', models.DateTimeField(auto_now_add=True)),[m
+[32m+[m[32m                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0016_merge_0002_auto_20250402_1642_0015_cart.py b/fyp/fypapp/migrations/0016_merge_0002_auto_20250402_1642_0015_cart.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..2ffbbd0[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0016_merge_0002_auto_20250402_1642_0015_cart.py[m
+[36m@@ -0,0 +1,14 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-04-02 12:22[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0002_auto_20250402_1642'),[m
+[32m+[m[32m        ('fypapp', '0015_cart'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0017_wishlistitem_attribute.py b/fyp/fypapp/migrations/0017_wishlistitem_attribute.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..2bbb69f[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0017_wishlistitem_attribute.py[m
+[36m@@ -0,0 +1,19 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-04-05 07:41[m
+[32m+[m
+[32m+[m[32mimport django.db.models.deletion[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0016_merge_0002_auto_20250402_1642_0015_cart'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AddField([m
+[32m+[m[32m            model_name='wishlistitem',[m
+[32m+[m[32m            name='attribute',[m
+[32m+[m[32m            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='fypapp.productattribute'),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0018_alter_wishlistitem_unique_together.py b/fyp/fypapp/migrations/0018_alter_wishlistitem_unique_together.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..971b828[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0018_alter_wishlistitem_unique_together.py[m
+[36m@@ -0,0 +1,17 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-04-05 07:42[m
+[32m+[m
+[32m+[m[32mfrom django.db import migrations[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0017_wishlistitem_attribute'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.AlterUniqueTogether([m
+[32m+[m[32m            name='wishlistitem',[m
+[32m+[m[32m            unique_together={('user', 'product', 'attribute')},[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/0019_payment.py b/fyp/fypapp/migrations/0019_payment.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b89adf7[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/migrations/0019_payment.py[m
+[36m@@ -0,0 +1,28 @@[m
+[32m+[m[32m# Generated by Django 5.1.6 on 2025-04-21 04:36[m
+[32m+[m
+[32m+[m[32mimport django.db.models.deletion[m
+[32m+[m[32mimport uuid[m
+[32m+[m[32mfrom django.conf import settings[m
+[32m+[m[32mfrom django.db import migrations, models[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Migration(migrations.Migration):[m
+[32m+[m
+[32m+[m[32m    dependencies = [[m
+[32m+[m[32m        ('fypapp', '0018_alter_wishlistitem_unique_together'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    operations = [[m
+[32m+[m[32m        migrations.CreateModel([m
+[32m+[m[32m            name='Payment',[m
+[32m+[m[32m            fields=[[m
+[32m+[m[32m                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),[m
+[32m+[m[32m                ('transaction_id', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),[m
+[32m+[m[32m                ('method', models.CharField(choices=[('card', 'Credit/Debit Card'), ('bank', 'Bank Transfer'), ('wallet', 'Wallet'), ('cod', 'Cash on Delivery')], max_length=20)),[m
+[32m+[m[32m                ('status', models.CharField(choices=[('pending', 'Pending'), ('confirmed', 'Confirmed'), ('failed', 'Failed')], default='pending', max_length=20)),[m
+[32m+[m[32m                ('amount', models.DecimalField(decimal_places=2, max_digits=10)),[m
+[32m+[m[32m                ('created_at', models.DateTimeField(auto_now_add=True)),[m
+[32m+[m[32m                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m    ][m
+[1mdiff --git a/fyp/fypapp/migrations/__init__.py b/fyp/fypapp/migrations/__init__.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e69de29[m
+[1mdiff --git a/fyp/fypapp/models.py b/fyp/fypapp/models.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..46b8d55[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/models.py[m
+[36m@@ -0,0 +1,187 @@[m
+[32m+[m[32mfrom django.db import models[m
+[32m+[m[32mfrom django.contrib.auth.models import AbstractUser, BaseUserManager[m
+[32m+[m[32mfrom django.conf import settings[m
+[32m+[m[32mfrom django.utils.timezone import now[m[41m  [m
+[32m+[m[32mfrom django.utils.html import mark_safe[m
+[32m+[m
+[32m+[m[32m# ---------------- Custom User Manager ----------------[m
+[32m+[m[32mclass CustomUserManager(BaseUserManager):[m
+[32m+[m[32m    def create_user(self, email, password=None, **extra_fields):[m
+[32m+[m[32m        if not email:[m
+[32m+[m[32m            raise ValueError("The Email field must be set")[m
+[32m+[m[32m        email = self.normalize_email(email)[m
+[32m+[m[32m        user = self.model(email=email, **extra_fields)[m
+[32m+[m[32m        user.set_password(password)[m
+[32m+[m[32m        user.save(using=self._db)[m
+[32m+[m[32m        return user[m
+[32m+[m
+[32m+[m[32m    def create_superuser(self, email, password=None, **extra_fields):[m
+[32m+[m[32m        extra_fields.setdefault("is_staff", True)[m
+[32m+[m[32m        extra_fields.setdefault("is_superuser", True)[m
+[32m+[m[32m        return self.create_user(email, password, **extra_fields)[m
+[32m+[m
+[32m+[m[32m# ---------------- Custom User Model ----------------[m
+[32m+[m[32mclass CustomUser(AbstractUser):[m
+[32m+[m[32m    email = models.EmailField(unique=True)[m
+[32m+[m[32m    username = None[m[41m  [m
+[32m+[m[32m    USERNAME_FIELD = "email"[m[41m  [m
+[32m+[m[32m    REQUIRED_FIELDS = [][m[41m  [m
+[32m+[m
+[32m+[m[32m    objects = CustomUserManager()[m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        return self.email[m
+[32m+[m
+[32m+[m[32m# ---------------- Category Model ----------------[m
+[32m+[m[32mclass Category(models.Model):[m
+[32m+[m[32m    title = models.CharField(max_length=100)[m
+[32m+[m[32m    image = models.ImageField(upload_to="cat_imgs/", null=True, blank=True)[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        verbose_name_plural = '1. Categories'[m
+[32m+[m
+[32m+[m[32m    def image_tag(self):[m
+[32m+[m[32m        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))[m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        return self.title[m
+[32m+[m
+[32m+[m[32m# ---------------- Brands Model ----------------[m
+[32m+[m[32mclass Brands(models.Model):[m[41m  [m
+[32m+[m[32m    title = models.CharField(max_length=100)[m
+[32m+[m[32m    image = models.ImageField(upload_to="category_images/", null=True, blank=True)[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        verbose_name_plural = "2. Brands"[m
+[32m+[m
+[32m+[m[32m    def image_tag(self):[m
+[32m+[m[32m        return mark_safe('<img src="%s" width="150" height="150" />' % (self.image.url))[m[41m    [m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        return self.title[m
+[32m+[m
+[32m+[m[32m# ---------------- Products Model ----------------[m
+[32m+[m[32mclass Products(models.Model):[m[41m [m
+[32m+[m[32m    image = models.ImageField(upload_to='product-images/')[m
+[32m+[m[32m    title = models.CharField(max_length=100, unique=True)[m
+[32m+[m[32m    slug = models.CharField(max_length=400)[m
+[32m+[m[32m    processor = models.CharField(max_length=100)[m
+[32m+[m[32m    category = models.ForeignKey(Category, on_delete=models.CASCADE)[m
+[32m+[m[32m    brand = models.ForeignKey(Brands, on_delete=models.CASCADE)[m
+[32m+[m[32m    status = models.BooleanField(default=True)[m
+[32m+[m[32m    is_featured = models.BooleanField(default=False)[m
+[32m+[m[32m    is_new = models.BooleanField(default=False)[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        verbose_name_plural = "3. Products"[m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        return self.title[m
+[32m+[m
+[32m+[m[32m    def image_tag(self):[m
+[32m+[m[32m        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))[m
+[32m+[m[41m    [m
+[32m+[m[32m# trending products[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ---------------- Ram Model ----------------[m
+[32m+[m[32mclass Ram(models.Model):[m
+[32m+[m[32m    ram = models.CharField(max_length=50)[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        verbose_name_plural = "4. Ram"[m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        return self.ram[m
+[32m+[m
+[32m+[m[32m# ---------------- Storage Model ----------------[m
+[32m+[m[32mclass Storage(models.Model):[m
+[32m+[m[32m    storage = models.CharField(max_length=50)[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        verbose_name_plural = "5. Storage"[m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        return self.storage[m
+[32m+[m
+[32m+[m[32m# ---------------- Product Attribute Model -------------------[m
+[32m+[m[32mclass ProductAttribute(models.Model):[m
+[32m+[m[32m    product = models.ForeignKey(Products, on_delete=models.CASCADE)[m
+[32m+[m[32m    ram = models.ForeignKey(Ram, on_delete=models.CASCADE)[m
+[32m+[m[32m    storage = models.ForeignKey(Storage, on_delete=models.CASCADE)[m
+[32m+[m[32m    price = models.IntegerField()[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        verbose_name_plural = "6. Products Attribute"[m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        return f"{self.product.title} ({self.ram.ram} | {self.storage.storage})"[m
+[32m+[m
+[32m+[m[32m# ---------------- Cart Model ----------------[m
+[32m+[m
+[32m+[m[32mclass Cart(models.Model):[m
+[32m+[m[32m    # Use settings.AUTH_USER_MODEL instead of directly referencing User[m
+[32m+[m[32m    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)[m
+[32m+[m[32m    product_id = models.IntegerField()  # or ForeignKey to Product[m
+[32m+[m[32m    attribute_id = models.IntegerField()  # or ForeignKey to Attribute[m
+[32m+[m[32m    quantity = models.PositiveIntegerField(default=1)[m
+[32m+[m[32m    added_at = models.DateTimeField(auto_now_add=True)[m
+[32m+[m[41m    [m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        return f"{self.user.username} - Product {self.product_id} - Attr {self.attribute_id}"[m
+[32m+[m
+[32m+[m[32mclass CartItem(models.Model):[m
+[32m+[m[32m    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)  # Made nullable[m
+[32m+[m[32m    product = models.ForeignKey(Products, on_delete=models.CASCADE)[m
+[32m+[m[32m    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE, null=True, blank=True)[m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        ram = self.attribute.ram.ram if self.attribute else "No Attribute"[m
+[32m+[m[32m        storage = self.attribute.storage.storage if self.attribute else "No Storage"[m
+[32m+[m[32m        return f"{self.quantity} x {self.product.title} ({ram} | {storage})"[m
+[32m+[m
+[32m+[m[32m# ---------------- Wishlist Model ----------------[m
+[32m+[m[32mclass WishlistItem(models.Model):[m
+[32m+[m[32m    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)[m
+[32m+[m[32m    product = models.ForeignKey(Products, on_delete=models.CASCADE)[m
+[32m+[m[32m    attribute = models.ForeignKey(ProductAttribute, on_delete=models.SET_NULL, null=True, blank=True)[m
+[32m+[m[32m    added_at = models.DateTimeField(default=now)[m
+[32m+[m
+[32m+[m[32m    class Meta:[m
+[32m+[m[32m        unique_together = ('user', 'product', 'attribute')  # optional but nice to avoid duplicates[m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        ram = self.attribute.ram.ram if self.attribute else "No RAM"[m
+[32m+[m[32m        storage = self.attribute.storage.storage if self.attribute else "No Storage"[m
+[32m+[m[32m        return f"{self.user.email} - {self.product.title} ({ram} | {storage})"[m
+[32m+[m
+[32m+[m[32m# ---------------- Payment Model -----------------[m
+[32m+[m[32mfrom django.db import models[m
+[32m+[m[32mfrom django.contrib.auth import get_user_model[m
+[32m+[m[32mimport uuid[m
+[32m+[m
+[32m+[m[32mUser = get_user_model()[m
+[32m+[m
+[32m+[m[32mclass Payment(models.Model):[m
+[32m+[m[32m    PAYMENT_METHODS = [[m
+[32m+[m[32m        ('card', 'Credit/Debit Card'),[m
+[32m+[m[32m        ('bank', 'Bank Transfer'),[m
+[32m+[m[32m        ('wallet', 'Wallet'),[m
+[32m+[m[32m        ('cod', 'Cash on Delivery'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    STATUS_CHOICES = [[m
+[32m+[m[32m        ('pending', 'Pending'),[m
+[32m+[m[32m        ('confirmed', 'Confirmed'),[m
+[32m+[m[32m        ('failed', 'Failed'),[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m[32m    user = models.ForeignKey(User, on_delete=models.CASCADE)[m
+[32m+[m[32m    transaction_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)[m
+[32m+[m[32m    method = models.CharField(max_length=20, choices=PAYMENT_METHODS)[m
+[32m+[m[32m    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')[m
+[32m+[m[32m    amount = models.DecimalField(max_digits=10, decimal_places=2)[m
+[32m+[m[32m    created_at = models.DateTimeField(auto_now_add=True)[m
+[32m+[m
+[32m+[m[32m    def __str__(self):[m
+[32m+[m[32m        return f"{self.user} | {self.method} | {self.status}"[m
+\ No newline at end of file[m
+[1mdiff --git a/fyp/fypapp/signals.py b/fyp/fypapp/signals.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0382896[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/signals.py[m
+[36m@@ -0,0 +1,25 @@[m
+[32m+[m[32mimport os[m
+[32m+[m[32mimport subprocess[m
+[32m+[m[32mfrom django.db.models.signals import post_save[m
+[32m+[m[32mfrom django.dispatch import receiver[m
+[32m+[m[32mfrom django.contrib.staticfiles.storage import ManifestStaticFilesStorage[m
+[32m+[m
+[32m+[m[32m@receiver(post_save)[m
+[32m+[m[32mdef auto_collectstatic(sender, **kwargs):[m
+[32m+[m[32m    if isinstance(sender, ManifestStaticFilesStorage):[m
+[32m+[m[32m        print("Running collectstatic automatically...")[m
+[32m+[m[32m        subprocess.run(["python", "manage.py", "collectstatic", "--noinput"])[m
+[32m+[m
+[32m+[m
+[32m+[m[32mfrom django.db.models.signals import post_save[m
+[32m+[m[32mfrom django.dispatch import receiver[m
+[32m+[m[32mfrom fypapp.models import WishlistItem, ProductAttribute[m
+[32m+[m
+[32m+[m[32m@receiver(post_save, sender=WishlistItem)[m
+[32m+[m[32mdef update_wishlist_attribute(sender, instance, **kwargs):[m
+[32m+[m[32m    if instance.attribute is None:[m
+[32m+[m[32m        default_attribute = ProductAttribute.objects.filter(product=instance.product).first()[m
+[32m+[m[32m        if default_attribute:[m
+[32m+[m[32m            instance.attribute = default_attribute[m
+[32m+[m[32m            instance.save(update_fields=["attribute"])[m
+[32m+[m
+[1mdiff --git a/fyp/fypapp/templates/apple.html b/fyp/fypapp/templates/apple.html[m
+[1mnew file mode 100644[m
+[1mindex 0000000..43367bd[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/templates/apple.html[m
+[36m@@ -0,0 +1,82 @@[m
+[32m+[m[32m{% extends 'base.html' %}[m
+[32m+[m[32m{% block content %}[m
+[32m+[m[32m{% load static %}[m
+[32m+[m[32m{% load custom_filters %}[m
+[32m+[m
+[32m+[m[32m <!-- Apple section starts here -->[m
+[32m+[m[32m <div class="apple" id="apple">[m
+[32m+[m[32m    <div class="ncontainer">[m
+[32m+[m[32m        <div class="heading"> <H2>Apple</H2> </div>[m
+[32m+[m[32m            <div class="main">[m
+[32m+[m[32m                {% for product in products %}[m
+[32m+[m[32m                    <div class="card product-card" data-product-id="{{ product.id }}">[m
+[32m+[m[32m                        <div class="img">[m
+[32m+[m[32m                            <img src="{{ product.image.url }}" alt="{{ product.title }}">[m
+[32m+[m[32m                        </div>[m
+[32m+[m[32m                        <div class="content">[m
+[32m+[m[32m                            <div class="name">[m
+[32m+[m[32m                                <h3>{{ product.title }}</h3>[m
+[32m+[m[32m                            </div>[m
+[32m+[m[32m                            <hr>[m
+[32m+[m[41m                        [m
+[32m+[m[32m                            <!-- Specifications -->[m
+[32m+[m[32m                            <h3>Specification</h3>[m
+[32m+[m[32m                            <p>[m
+[32m+[m[32m                                <b>Brand:</b> {{ product.brand.title }} <br>[m[41m [m
+[32m+[m[32m                                <b>Processor:</b> {{ product.processor }} Gen <br>[m
+[32m+[m[41m                            [m
+[32m+[m[32m                                <!-- RAM Selection -->[m
+[32m+[m[32m                                <b>Ram:</b>[m
+[32m+[m[32m                                <select class="ram-select" data-product-id="{{ product.id }}">[m
+[32m+[m[32m                                    {% for ram in product.unique_rams %}[m
+[32m+[m[32m                                        <option value="{{ ram.0 }}">{{ ram.1 }}</option>[m
+[32m+[m[32m                                    {% endfor %}[m
+[32m+[m[32m                                </select>[m
+[32m+[m[32m                                <br>[m
+[32m+[m[41m                            [m
+[32m+[m[32m                                <!-- Storage Selection -->[m
+[32m+[m[32m                                <b>Storage:</b>[m
+[32m+[m[32m                                <select class="storage-select" data-product-id="{{ product.id }}">[m
+[32m+[m[32m                                    {% for storage in product.unique_storages %}[m
+[32m+[m[32m                                        <option value="{{ storage.0 }}">{{ storage.1 }}</option>[m
+[32m+[m[32m                                    {% endfor %}[m
+[32m+[m[32m                                </select>[m
+[32m+[m[32m                            </p>[m
+[32m+[m[32m                            <hr>[m
+[32m+[m[41m                        [m
+[32m+[m[32m                            <!-- Price Display -->[m
+[32m+[m[32m                            <div class="price">[m
+[32m+[m[32m                                <b>Price:</b>[m[41m [m
+[32m+[m[32m                                <span class="product-price">[m
+[32m+[m[32m                                    {% if product.productattribute_set.first %}[m
+[32m+[m[32m                                        RS.{{ product.productattribute_set.first.price }}/-[m
+[32m+[m[32m                                    {% else %}[m
+[32m+[m[32m                                        Price not available[m
+[32m+[m[32m                                    {% endif %}[m
+[32m+[m[32m                                </span>[m
+[32m+[m[32m                            </div>[m
+[32m+[m[41m                        [m
+[32m+[m[32m                            <!-- Cart & Wishlist Buttons -->[m
+[32m+[m[32m                            <div class="buttoncw">[m
+[32m+[m[32m                                <button  class="add-to-cart" type="button" id="addToCartBtn">Add to Cart</button>[m
+[32m+[m[32m                                <button class="add-to-wishlist" type="button" id="addToWishlistBtn" data-product-id="{{ product.id }}">[m
+[32m+[m[32m                                    <i class="fa-regular fa-heart"></i>[m
+[32m+[m[32m                                </button>[m
+[32m+[m[41m                            [m
+[32m+[m[32m                            </div>[m
+[32m+[m[32m                        </div>[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                {% endfor %}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[41m                [m
+[32m+[m[32m            </div>[m
+[32m+[m[32m     </div >[m
+[32m+[m[32m</div>[m
+[32m+[m[32m <!-- Apple section ends here -->[m
+[32m+[m
+[32m+[m
+[32m+[m[32m{% endblock %}[m
+\ No newline at end of file[m
+[1mdiff --git a/fyp/fypapp/templates/base.html b/fyp/fypapp/templates/base.html[m
+[1mnew file mode 100644[m
+[1mindex 0000000..59c6351[m
+[1m--- /dev/null[m
+[1m+++ b/fyp/fypapp/templates/base.html[m
+[36m@@ -0,0 +1,271 @@[m
+[32m+[m[32m{% load static %}[m
+[32m+[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="en">[m
+[32m+[m[32m<head>[m
+[32m+[m[32m    <meta charset="UTF-8">[m
+[32m+[m[32m    <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[32m+[m[32m    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">[m
+[32m+[m[32m    <link rel="stylesheet" href="{% static 'css1/ecommerce.css' %}">[m
+[32m+[m[32m    <link rel="icon" type="image/x-icon" href="{% static 'img/Untitled.png' %}">[m
+[32m+[m[32m    <title>Dynamic Laptops</title>[m
+[32m+[m[32m  <style>[m
+[32m+[m[32m    .content .buttoncw #addToWishlistBtn{[m
+[32m+[m[32m    padding: 8px 10px;[m
+[32m+[m[32m    border: 1px solid black;[m
+[32m+[m[32m    border-radius: 25% ;[m
+[32m+[m[32m    display: flex;[m
+[32m+[m[32m    align-items: center;[m
+[32m+[m[32m    transition: 0.3s linear;[m
+[32m+[m[32m    }[m
+[32m+[m[32m    .content .buttoncw #addToWishlistBtn:hover{[m
+[32m+[m[32m        color: #D01920;[m
+[32m+[m[32m    }[m
+[32m+[m[32m  </style>[m
+[32m+[m[32m</head>[m
+[32m+[m[32m<body>[m
+[32m+[m[32m    <!-- Display messages in the template -->[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    <div class="section1">[m
+[32m+[m[32m        <div class="header">[m
+[32m+[m[32m            <a href="{% url 'ecommerce' %}">[m
+[32m+[m[32m                <div class="box1">[m[41m [m
+[32m+[m[41m                   [m
+[32m+[m[32m                    <div class="logo">Dynamic Laptops <span>.</span></div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m            </a>[m
+[32m+[m[32m            <div class="box2">[m
+[32m+[m[32m                <input type="checkbox" id="search" name="search">[m
+[32m+[m[32m                    <label for="search">[m
+[32m+[m[32m                        <div class="searchlogo"><i class="fa-solid fa-magnifying-glass"></i></div>[m
+[32m+[m[32m                    </label>[m
+[32m+[m[32m                <div class="search">[m
+[32m+[m[32m                    <form action="{% url 'search' %}" method="GET">[m
+[32m+[m[32m                        <input name="q" type="text" id="searchInput" name="q" placeholder="Search for products..." value="{{ request.GET.q }}">[m
+[32m+[m[32m                        <button type="submit" id="searchButton">Search</button>[m
+[32m+[m[32m                    </form>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m                <div class="box3">[m
+[32m+[m[32m                    <div class="your-wishlist">[m
+[32m+[m[32m                        <input type="checkbox" id="wishlist" name="wishlist">[m
+[32m+[m[32m                        <label for="wishlist">[m
+[32m+[m[32m                            <div class="logo" title="Wishlist"><i class="fas fa-heart"></i><span id="wishlist-count">0</span></div>[m
+[32m+[m[32m                        </label>[m
+[32m+[m[32m                        <div class="show-wishlist">[m
+[32m+[m[32m                            <div class="wishlist-header">[m
+[32m+[m[32m                                <h3>Wishlist</h3>[m
+[32m+[m[32m                            </div>[m
+[32m+[m[32m                            <table class="wishlist-table" style="color: #ddd;">[m
+[32m+[m[32m                                <thead>[m
+[32m+[m[32m                                    <tr>[m
+[32m+[m[32m                                        <th>Product</th>[m
+[32m+[m[32m                                        <th>RAM</th>[m
+[32m+[m[32m                                        <th>Storage</th>[m
+[32m+[m[32m                                        <th>Price</th>[m
+[32m+[m[41m                                        [m
+[32m+[m[32m                                        <th>Action</th>[m
+[32m+[m[32m                                    </tr>[m
+[32m+[m[32m                                </thead>[m
+[32m+[m[32m                                <tbody>[m
+[32m+[m[32m                                    {% for item in wishlist_items %}[m
+[32m+[m[32m                                    <tr>[m
+[32m+[m[32m                                        <td>{{ item.product.title }}</td>[m
+[32m+[m[32m                                        <td>{{ item.attribute.ram.ram }}</td>[m
+[32m+[m[32m                                        <td>{{ item.attribute.storage.storage }}</td>[m
+[32m+[m[32m                                        <td>RS.{{ item.attribute.price }}/-</td>[m
+[32m+[m[41m                                        [m
+[32m+[m[32m                                        <td><button class="remove-wishlist" data-id="{{ item.id }}"><i class="fa-solid fa-trash"></i></button></td>[m
+[32m+[m[32m                                    </tr>[m
+[32m+[m[32m                                    {% empty %}[m
+[32m+[m[32m                               
