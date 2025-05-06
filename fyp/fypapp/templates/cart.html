@@ -1,0 +1,112 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css1/ecommerce.css' %}">
+    <style>
+        .user {
+            display: none;
+        }
+        .your-cart {
+            display: none;
+        }
+        .cart-item {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+        }
+        .cart-item .image img {
+            width: 50px;
+        }
+    
+    
+        .cart-footer {
+            position: absolute;
+            bottom: 0;
+        }
+        .checkout-btn {
+        display: block;
+        text-align: center;
+        background-color: #28a745;  /* Green button */
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 10px;
+        
+    }
+    
+    .checkout-btn:hover {
+        background-color: #218838;  /* Darker green on hover */
+    }
+    .close-cart-btn {
+    display: block;
+    text-align: center;
+    background-color: #dc3545;  /* Red color */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.close-cart-btn:hover {
+    background-color: #c82333;  /* Darker red on hover */
+}
+
+    
+    </style>
+</head>
+<body>
+    <div class="your_cart">
+    
+        <div class="show-cart">
+            <div class="cart-header">
+                <h3>Your Cart</h3>
+            </div>
+            <div class="cart-items">
+                {% for item in cart_items %}
+                <div class="cart-item">
+                    <div class="image">
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" width="100">
+                    </div>
+                   <div class="tiltle"><p>{{ item.product.title }}</p></div> 
+                   <div class="ram"><p>{{ item.attribute.ram.ram }} RAM</p></div>
+                   <div class="storage"><p>{{ item.attribute.storage.storage }} Storage</p></div>
+                   <div class="price"><p>{{ item.attribute.price }} PKR</p></div>
+                   
+                   
+                    <form method="POST" action="{% url 'remove_from_cart' item.product.id item.attribute.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="remove-from-cart">Remove</button>
+                    </form>
+                    
+                </div>
+                {% empty %}
+                <p>Your cart is empty.</p>
+                {% endfor %}
+                <div class="cart-footer">
+                    <a href="{% url 'ecommerce' %}" class="close-cart-btn">Close Cart</a>
+                    <a href="{% url 'checkout' %}" class="checkout-btn">Proceed to Checkout</a>
+                </div>
+        </div>
+    </div>
+    
+    </div>
+
+    <script src="{% static 'js1/ec.js' %}" defer></script>
+</body>
+</html>
+
+
+
+
+
+

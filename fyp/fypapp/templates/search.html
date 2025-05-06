@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="search">
+    <div class="ncontainer">
+        <div class="heading">
+            <h2>Search Results for "{{ request.GET.q }}"</h2>
+        </div>
+        <div class="main">
+            {% if products %}
+                {% for product in products %}
+                    <div class="card product-card" data-product-id="{{ product.id }}">
+                        <div class="img">
+                            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <h3>{{ product.title }}</h3>
+                            </div>
+                            <hr>
+                            
+                            <!-- Specifications -->
+                            <h3>Specification</h3>
+                            <p>
+                                <b>Brand:</b> {{ product.brand.title }} <br> 
+                                <b>Processor:</b> {{ product.processor }} Gen <br>
+
+                                <!-- RAM Selection -->
+                                <b>Ram:</b>
+                                <select class="ram-select" data-product-id="{{ product.id }}">
+                                    {% for ram in product.unique_rams %}
+                                        <option value="{{ ram.0 }}">{{ ram.1 }}</option>
+                                    {% empty %}
+                                        <option value="" disabled selected>No RAM options</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+                                
+                                <!-- Storage Selection -->
+                                <b>Storage:</b>
+                                <select class="storage-select" data-product-id="{{ product.id }}">
+                                    {% for storage in product.unique_storages %}
+                                        <option value="{{ storage.0 }}">{{ storage.1 }}</option>
+                                    {% empty %}
+                                        <option value="" disabled selected>No Storage options</option>
+                                    {% endfor %}
+                                </select>
+                            </p>
+                            <hr>
+
+                            <!-- Price Display -->
+                            <div class="price">
+                                <b>Price:</b> 
+                                <span class="product-price">
+                                    Loading price...
+                                </span>
+                            </div>
+
+                            <!-- Cart & Wishlist Buttons -->
+                            <div class="buttoncw">
+                                <button  class="add-to-cart" type="button" id="addToCartBtn">Add to Cart</button>
+                                <button title="wishlist" class="add-to-wishlist-btn"><i class="fa-regular fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No products found for your search.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<!-- related products -->
+<div class="search">
+    <div class="ncontainer">
+        <div class="heading">
+            <h2>Related Products</h2>
+        </div>
+        <div class="main">
+            {% if related %}
+                {% for product in related %}
+                    <div class="card product-card" data-product-id="{{ product.id }}">
+                        <div class="img">
+                            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <h3>{{ product.title }}</h3>
+                            </div>
+                            <hr>
+                            
+                            <!-- Specifications -->
+                            <h3>Specification</h3>
+                            <p>
+                                <b>Brand:</b> {{ product.brand.title }} <br> 
+                                <b>Processor:</b> {{ product.processor }} Gen <br>
+
+                                <!-- RAM Selection -->
+                                <b>Ram:</b>
+                                <select class="ram-select" data-product-id="{{ product.id }}">
+                                    {% for ram in product.unique_rams %}
+                                        <option value="{{ ram.0 }}">{{ ram.1 }}</option>
+                                    {% empty %}
+                                        <option value="" disabled selected>No RAM options</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+                                
+                                <!-- Storage Selection -->
+                                <b>Storage:</b>
+                                <select class="storage-select" data-product-id="{{ product.id }}">
+                                    {% for storage in product.unique_storages %}
+                                        <option value="{{ storage.0 }}">{{ storage.1 }}</option>
+                                    {% empty %}
+                                        <option value="" disabled selected>No Storage options</option>
+                                    {% endfor %}
+                                </select>
+                            </p>
+                            <hr>
+
+                            <!-- Price Display -->
+                            <div class="price">
+                                <b>Price:</b> 
+                                <span class="product-price">
+                                    Loading price...
+                                </span>
+                            </div>
+
+                            <!-- Cart & Wishlist Buttons -->
+                            <div class="buttoncw">
+                                <button class="add-to-cart">Add to Cart</button>
+                                <button title="wishlist" class="add-to-wishlist">
+                                    <i class="fa-regular fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No products found for your search.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("JavaScript Loaded for search page");
+
+    document.querySelectorAll(".product-card").forEach(function (card) {
+        let productId = card.dataset.productId;
+        let ramSelect = card.querySelector(".ram-select");
+        let storageSelect = card.querySelector(".storage-select");
+        let priceElement = card.querySelector(".product-price");
+
+        if (!ramSelect || !storageSelect || !priceElement) {
+            console.warn(`Missing elements for Product ID: ${productId}`);
+            return;
+        }
+
+        function fetchPrice() {
+            let ramId = ramSelect.value;
+            let storageId = storageSelect.value;
+
+            if (!ramId || !storageId) {
+                console.warn(`Skipping fetch: Missing RAM or Storage for Product ID: ${productId}`);
+                priceElement.textContent = "Please select RAM & Storage";
+                return;
+            }
+
+            console.log(`Fetching price for Product ID: ${productId}, RAM: ${ramId}, Storage: ${storageId}`);
+
+            fetch(`/get_price/?product_id=${productId}&ram_id=${ramId}&storage_id=${storageId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        console.error("Error fetching price:", data.error);
+                        priceElement.textContent = "Price not available";
+                    } else {
+                        priceElement.textContent = `Rs. ${data.price}/-`;
+                        console.log(`Updated price for Product ID ${productId}: Rs. ${data.price}/-`);
+                    }
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                    priceElement.textContent = "Error loading price";
+                });
+        }
+
+        // Attach event listeners
+        ramSelect.addEventListener("change", fetchPrice);
+        storageSelect.addEventListener("change", fetchPrice);
+
+        // Wait a short moment before initial fetch to ensure selects are populated
+        setTimeout(fetchPrice, 100);
+    });
+});
+</script>
+{% endblock %}
