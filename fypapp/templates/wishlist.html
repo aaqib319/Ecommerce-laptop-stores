@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% csrf_token %}
+{% block content %}
+<style>
+    body {
+        background-color: black;
+    }
+</style>
+
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+{% if not wishlist_items %}
+    <p class="empty-wishlist-message">Your wishlist is empty.</p>
+{% else %}
+    <table class="cart-table wishlist-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>RAM</th>
+                <th>Storage</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in wishlist_items %}
+            <div class="cart-item">
+                <div class="image">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" width="100">
+                </div>
+               <div class="tiltle"><p>{{ item.product.title }}</p></div> 
+               <div class="ram"><p>{{ item.attribute.ram.ram }} RAM</p></div>
+               <div class="storage"><p>{{ item.attribute.storage.storage }} Storage</p></div>
+               <div class="price"><p>{{ item.attribute.price }} PKR</p></div>
+               
+               
+                <form method="POST" action="{% url 'remove_from_cart' item.product.id item.attribute.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="remove-from-cart">Remove</button>
+                </form>
+                
+            </div>
+            {% empty %}
+            <p>Your cart is empty.</p>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% csrf_token %}  
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for brand in brands %}
+{% load static %}
+<div class="shop">
+    <div class="container">
+        <div class="heading"><h2>Shop Product by <b>Brand</b></h2></div>
+        <div class="main">
+            <div class="brand">
+                {% for brand in brands %}
+                    <a href="/{{ brand.title }}">
+                        <div class="card">
+                            <div class="logo">
+                                <img src="{{ brand.image.url }}" alt="{{ brand.title }}">
+                            </div>
+                            <div class="text">{{ brand.title }}</div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

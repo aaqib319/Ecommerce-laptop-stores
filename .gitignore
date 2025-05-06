@@ -1,0 +1,15 @@
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore the virtual environment directory
+djangoenv/
+
+# Ignore SQLite database file
+db.sqlite3
+
+# Ignore media files
+media/
+
+# Ignore static files (if you use a local directory for static files)
+static/

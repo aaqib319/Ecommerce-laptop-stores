@@ -1,0 +1,271 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css1/ecommerce.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/Untitled.png' %}">
+    <title>Dynamic Laptops</title>
+  <style>
+    .content .buttoncw #addToWishlistBtn{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+    transition: 0.3s linear;
+    }
+    .content .buttoncw #addToWishlistBtn:hover{
+        color: #D01920;
+    }
+  </style>
+</head>
+<body>
+    <!-- Display messages in the template -->
+
+
+    <div class="section1">
+        <div class="header">
+            <a href="{% url 'ecommerce' %}">
+                <div class="box1"> 
+                   
+                    <div class="logo">Dynamic Laptops <span>.</span></div>
+                </div>
+            </a>
+            <div class="box2">
+                <input type="checkbox" id="search" name="search">
+                    <label for="search">
+                        <div class="searchlogo"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    </label>
+                <div class="search">
+                    <form action="{% url 'search' %}" method="GET">
+                        <input name="q" type="text" id="searchInput" name="q" placeholder="Search for products..." value="{{ request.GET.q }}">
+                        <button type="submit" id="searchButton">Search</button>
+                    </form>
+                </div>
+            </div>
+                <div class="box3">
+                    <div class="your-wishlist">
+                        <input type="checkbox" id="wishlist" name="wishlist">
+                        <label for="wishlist">
+                            <div class="logo" title="Wishlist"><i class="fas fa-heart"></i><span id="wishlist-count">0</span></div>
+                        </label>
+                        <div class="show-wishlist">
+                            <div class="wishlist-header">
+                                <h3>Wishlist</h3>
+                            </div>
+                            <table class="wishlist-table" style="color: #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>RAM</th>
+                                        <th>Storage</th>
+                                        <th>Price</th>
+                                        
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in wishlist_items %}
+                                    <tr>
+                                        <td>{{ item.product.title }}</td>
+                                        <td>{{ item.attribute.ram.ram }}</td>
+                                        <td>{{ item.attribute.storage.storage }}</td>
+                                        <td>RS.{{ item.attribute.price }}/-</td>
+                                        
+                                        <td><button class="remove-wishlist" data-id="{{ item.id }}"><i class="fa-solid fa-trash"></i></button></td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6">Your wishlist is empty!</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            
+                                <div class="wishlist_footer">
+                                    <a href="{% url 'ecommerce' %}" class="close-cart-btn">Close Wishlist</a>
+                                
+                                    {% if wishlist_items %}
+                                    {% for item in wishlist_items %}
+                                    <a href="{% url 'move_to_cart' item.id %}" class="checkout-btn">Add to Cart</a>
+                                {% endfor %}
+                                
+                                    {% else %}
+                                        <span class="checkout-btn disabled">Add To Cart</span>
+                                    {% endif %}
+                                </div>
+
+
+
+
+                                
+
+
+                            <div id="wishlist-items">
+                                <!-- Wishlist items will be dynamically inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="your-cart">
+                        <input type="checkbox" id="cart" name="cart">
+                        <label for="cart">
+                            <div class="logo" title="Cart">
+                                <i class="fa-solid fa-cart-shopping"></i><span id="cart-count">0</span>
+                            </div>
+                        </label>
+                    
+                        <div class="show-cart">
+                            <div class="cart-header">
+                                <h3>Your Cart</h3>
+                            </div>
+                            <div class="cart-items">
+                                <table class="cart-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>RAM</th>
+                                            <th>Storage</th>
+                                            <th>Price</th>
+                                            <th>Deleat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Cart items will be dynamically inserted here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="cart-footer">
+                                <a href="{% url 'ecommerce' %}" class="close-cart-btn">Close Cart</a>
+                                <a href="{% url 'checkout' %}" class="checkout-btn">Checkout</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                            
+                <div class="user"> 
+                    <div class="account">
+                        <input type="checkbox" id="account">
+                        <label for="account">
+                            <div class="al">
+                                <div class="logo"><i class="fa-solid fa-user"></i></div>
+                                <div class="text"><p>My Account</p></div>
+                            </div>
+                        </label>
+                        <div class="detail">
+                            {% if user.is_authenticated %}
+                                <div class="logout">
+                                    <form id="logout-form" action="{% url 'logout' %}" method="post">
+                                        {% csrf_token %}
+                                        <p><b>Welcome,</b> <br> {{ user.email}}</p>
+                                        <button type="submit">Logout</button>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <div class="login"><a href="{% url 'login' %}">Login</a></div>
+                                <div class="signup"><a href="{% url 'signup' %}">Signup</a></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    {%block slider %}
+
+    {%endblock%}
+
+    {%block sales%}
+
+    {%endblock%}
+    {%block category%}
+
+    {%endblock%}
+    {% block content %}
+        <h2>Search Results for "{{ query }}"</h2>
+        
+        {% if results %}
+            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                {% for product in results %}
+                    <div style="border: 1px solid #ddd; padding: 10px; width: 200px; text-align: center;">
+                        <img src="{{ product.image.url }}" alt="{{ product.title }}" style="width: 100px; height: 100px;">
+                        <h3>{{ product.title }}</h3>
+                        <p>{{ product.description }}</p>
+                        <p><strong>Price:</strong> ${{ product.price }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No products found.</p>
+        {% endif %}
+    {% endblock %}
+            
+    <!-- Footer Starts Here -->
+            <div class="footer">
+            <div class="container">
+            <div class="mbox1">
+            <div class="box1">
+                <div class="heading">
+                    <a href="{% url 'ecommerce' %}"><div class="logo">Dynamic Laptops <span>.</span></div></a>
+                    <div class="text"><p>Welcome to Dynamic Laptops , We are committed to providing our customers with the best shopping experience, from product selection to customer service. We deal in best price of laptops in Pakistan.We offer 20% off on every laptop.</p></div>
+                    
+                </div>
+                <div class="loc"><i class="fa-solid fa-location-dot"></i> <p>Pakistan</p></div>
+            </div>
+            <div class="box2">
+                <div class="heading">
+                    <div class="icon"><i class="fa-solid fa-earth-americas"></i> Our Loacation</div>
+                    
+                </div>
+                
+                <div class="location">
+                    <div class="loca">
+                        <div class="loched">Bahawalpur</div>
+                        <div class="loctxt">Trade Center Floor no.2 Shop no 120 Distict Punjab ,Pakistan</div>
+                    </div>
+                    <div class="loca">
+                        <div class="loched">Lahore</div>
+                        <div class="loctxt">12, Jln Perpustakawan U1/62, Kawasan Perindustrian Temasya, 40150 Shah Alam, Selangor, Malaysia</div>
+                    </div>
+                    <div class="loca">
+                        <div class="loched">Multan</div>
+                        <div class="loctxt">Khan Plaza Floor no.1 Shop no 10 Distict Punjab ,Pakistan</div>
+                    </div>
+                </div>
+            
+
+
+
+            </div>
+            </div>
+           
+            <div class="mbox2">
+                <div class="box21">
+                    <p>Copyright © 2025 Dynamic Laptops Hub. Bhd.(1205246-M). All rights reserved.</p>
+
+                </div>
+                <div class="box22">
+                    <ul>
+                        <li><a href=""><div><i class="fa-brands fa-facebook-f"></i></div></a></li>
+                        <li><a href=""><div><i class="fa-brands fa-instagram"></i></div></li></a>
+                        <li><a href=""><div><i class="fa-brands fa-tiktok"></i></div></li></a>
+                        <li><a href=""><div><i class="fa-brands fa-x-twitter"></i></div></li></a>
+                    </ul>
+                </div>
+            </div>
+            </div>
+            </div>
+            
+
+    <!-- Footer Ends Here -->
+
+    <script src="{% static 'js1/ec.js' %}" defer></script>
+</body>
+</html>

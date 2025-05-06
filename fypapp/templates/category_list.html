@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+</head>
+<body>
+    <h3 class="my-4 border-bottom pb-1">Categories</h3>
+    <div class="row">
+        {% if data %}
+            {% for category in data %}
+            <div class="col-md-3 mb-4">
+                <div class="card shadow">
+                    <a href="/category-product-list/{{ category.id }}">
+                        {% if category.image %}
+                            <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.title }}" />
+                        {% else %}
+                            <img src="/static/default-category.jpg" class="card-img-top" alt="No Image Available" />
+                        {% endif %}
+                    </a>
+                    <div class="card-body">
+                        <h6 class="card-text"><a href="#">{{ category.title }}</a></h6>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No categories found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

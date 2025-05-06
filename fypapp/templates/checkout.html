@@ -1,0 +1,322 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css1/ecommerce.css' %}">
+
+    <style>
+
+        .container{
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container .logo{
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container .logo a{
+            text-decoration: none;
+        }
+        .container .logo h1{
+            font-size: 36px;
+            color: #333;
+        }
+        .container .logo h1 span{
+            color: red;
+            font-size: 2.5rem   ;
+        }
+        .box{
+            display: flex;
+            justify-content: space-between;
+            padding-top: 50px;
+            gap: 20px;
+        }
+        .box1{
+           width: 65%; 
+        }
+        .box1 .heading h2{
+            font-size: 1.5rem;
+            color: #333;
+            text-align: left;
+            border-bottom: 1px solid #c1c1c1;
+            padding-bottom: 15px;
+            padding-top: 10px;
+            margin-bottom: 5px;
+        }
+        .box1 form{
+            line-height: 65px;
+            width: 100%;
+            padding-top: 5px;
+        }
+        .box1 .info label{
+            position: absolute;
+            transform: translateY(-70px);
+            transition: 0.3s linear;
+            color: #464646;
+            z-index: 1;
+            user-select: none;
+            padding-left: 2px;
+            font-size: 1.1rem;
+        }
+        .box1 .info input{
+            width: 100%;
+            padding: 10px;
+            padding-left: 2px;
+            margin-bottom: 10px;
+            background-color: #F5F5F6;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            caret-color:#8d8d8d;
+            z-index: 9999;
+        }
+        .box1 .info input:focus{
+            outline: none;
+            
+        }
+        .box1 .info input:invalid:focus{
+            border-bottom: 1px solid red;
+        }
+        .box1 div input:invalid:focus ~ label{
+            color: red;
+        }
+        .box1 .info input:focus ~ label,
+        .box1 .info input:not(:placeholder-shown) ~ label {
+            transform: translateY(-95px);
+            font-size: 0.92rem;
+        }
+        .box1 .info .proceed{
+            width: 100%;
+            padding: 10px;
+            background-color: #208cff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .box1 .info .proceed:hover{
+            background-color: #1a6bb8;
+        }
+        .box2{
+            width: 35%;
+            background-color: rgb(223, 223, 223);   
+            padding: 20px; 
+            padding-block: 10px;   
+            border-radius: 10px;  
+        }
+        .box2 .logo{
+            margin-bottom: 0;
+        }
+        .box2 .logo h1{
+            font-size: 1.5rem;
+            color: #333;
+            text-align: left;
+            border-bottom: 1px solid #c1c1c1;
+            padding-bottom: 15px;
+            font-weight: 400;
+        }  
+        .box2 .img{
+            width: 250px;
+            padding-left: 5px;
+        }
+        .box2 .detail p{
+            font-size: 0.9rem;
+        }
+        .box2 .price{
+            color: #000;
+            padding-top: 5px;
+        }
+        .box2 .img img{
+            width: 100%;
+        }
+        .box2 .checkout-item{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 5px;
+            margin-inline: 7px;
+            padding-block: 10px;
+            border-bottom: 1px solid #c1c1c1;
+            
+        }
+        .checkout-items{
+            border: 1px solid #c1c1c1;
+            background-color: #eeeeee;
+            border-radius: 5px;
+        }
+       
+        .box2 .display-itms{
+            padding-block: 15px;
+            font-size: 0.9rem;
+        }
+        .box2 .display-itms span{
+            color :#208cff;
+        }
+        .box2 .pricing div{ 
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #2e2e2e;
+        }
+        .box2 .pricing{
+            padding-block: 10px;
+            border-bottom: 1px solid #c1c1c1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+        }
+        .box2 .total-price{
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            color: #000;
+            padding-top: 10px;
+        }
+
+
+
+
+        @media screen and (max-width:850px){
+            .box{
+                flex-direction: column;
+                gap: 0px;
+            }
+            .box1{
+                width: 100%;
+            }
+            .box2{
+                width: 70%;
+                margin: 0 auto;
+            }
+        }
+        @media screen and (max-width:570px){
+            .container{
+                padding: 10px;
+            }
+            .box2{
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="logo">
+        <a href="{% url 'ecommerce' %}"><h1>Dynamic Laptops Hub <span>.</span></h1></a>
+        <div class="m-heading">
+            <h2>Checkout</h2>
+        </div>
+    </div>
+
+    <section class="box">
+        
+        <div class="box1">
+            
+            <div class="heading">
+                <h2>Delivery Details</h2>
+            </div>
+            <div class="information">
+                <div class="info">
+                    <form id="checkoutForm" method="post">
+                        {% csrf_token %}
+                        
+                        <div>
+                            <input type="text" id="fname" name="fname" value="{{ user.first_name }}" placeholder=" " required><br> 
+                            <label for="fname">First Name</label>
+                        </div>
+                    
+                        <div>
+                            <input type="text" id="lname" name="lname" value="{{ user.last_name }}" placeholder=" "><br>
+                            <label for="lname">Last Name</label>
+                        </div>
+                    
+                        <div>
+                            <input type="email" id="email" name="email" value="{{ user.email }}" placeholder=" " required><br>
+                            <label for="email">Email</label>
+                        </div>
+                    
+                        <div>
+                            <input type="tel" id="pno" name="pno" value="{{ user.phone_number }}" placeholder=" " required><br>
+                            <label for="pno">Phone Number</label>
+                        </div>
+                    
+                        <div>
+                            <input type="text" id="address" name="address" value="{{ user.address }}" placeholder=" " required><br>
+                            <label for="address">Address</label>
+                        </div>
+                    
+                        <button class="proceed" type="submit">Proceed to Pay</button>
+                    </form>
+                    
+                    
+                       
+                    
+                   
+                </div>
+            
+           
+        </div>
+        </div>
+    
+    <div class="box2">
+        <div class="checkout-container">
+            <div class="logo"><h1> Order Summery </h1></div>
+            <div class="display-itms"><p> You have total <span>{{ cart_items|length }} items</span> in your cart</p> </div>
+            <div class="checkout-items">
+                {% for item in cart_items %}
+
+                    <div class="checkout-item">
+                        <div class="img"><img src="{{ item.product.image.url }}" alt="{{ item.product.title }}"></div>
+                        <div class="detail">
+                            <p>
+                                <strong>{{ item.product.title }} {{ item.product.processor }} Gen Processor</strong> With <strong>{{ item.attribute.ram.ram }}</strong> RAM and <strong>{{ item.attribute.storage.storage }}</strong> Storage 
+                            </p>
+                            <p class="price"><strong> <u> Rs. {{ item.attribute.price }} </u></strong></p>
+                            
+                        </div>
+                        <div class="price">
+                            
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+           <div class="pricing">
+            <div class="total">
+                    <p>SubTotal ( {{ cart_items|length }} items )</p>
+                    <p>Rs {{total_price}}</p>
+                
+            </div>
+            <div class="shipping-cost">
+                <p>Shipping Cost</p>
+                <p>Rs {{shipping_cost}}</p>
+            </div>
+            <div class="tex">
+                <p>Estimated Tex</p>
+                <p>calculated later</p>
+            </div>
+            </div>
+            <div class="total-price">
+                <p>Total</p>
+                <p>Rs {{final_total }}</p>
+        </div>
+
+
+    </div>
+   
+    </section>
+    </div>
+
+
+    
+</body>
+</html>
+

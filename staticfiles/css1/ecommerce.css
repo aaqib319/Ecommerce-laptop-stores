@@ -1,0 +1,2147 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gugi&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+:root{
+    --red :#bf161b;
+    --bg-color : #F5F5F6;
+}
+body{
+    background-color: var(--bg-color);
+    font-family: "Montserrat", serif;
+    overflow-x: hidden;
+    height: 90%;
+}
+/* section 1 starts here */
+.section1{
+    background-color: #15161D;
+    width: 100%;
+    padding-block: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    padding: 10px 10px;
+    white-space: nowrap;
+    user-select: none;
+}
+.section1 .header a{
+    text-decoration: none;
+}
+
+.box1 .logo{
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+    margin-top: -20px;
+
+    /* font-family: "Coiny", serif; */
+}
+.box1 .logo  span{
+    color: var(--red);
+    font-size: 3rem;
+    padding-top: -70px;
+}
+.box2 .searchlogo{
+    display: none;
+}
+.box2 #search{
+    display: none;
+}
+.box2 .searchlogo i{
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: linear 0.3s;
+}
+.box2 .searchlogo i:hover{
+    color: #a8a8a8;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.box2 .search form{
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.box2 .search #searchInput{
+    all: unset;
+    border-radius:50px 0 0 50px;
+    padding: 4px 10px;
+    background-color: whitesmoke;
+    outline: none;
+    font-size: 15px;
+    border: 1px solid transparent;
+}
+
+
+.box2 .search #searchInput:focus{
+    border: 1px solid grey;
+}
+.box2 .search button{
+    all: unset;
+    padding: 5px 15px;
+    margin-left: -0px;
+    margin-top: 0px;
+    background-color: var(--red);
+    color: white;
+    font-weight: 600;
+    border-radius:0 50px 50px 0;
+    cursor: pointer;
+}
+.box3{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
+     padding-right:10px ;
+}
+.box3 .your-wishlist .logo i , .box3 .your-cart  .logo i{
+    color: var(--red);
+    transition: all 0.3s linear;
+    font-size: 1.5rem;
+}
+.box3 .your-wishlist #wishlist,.box3 .your-cart #cart{
+    display: none;
+}
+.box3 .your-wishlist .logo span , .box3 .your-cart .logo span{
+    position: relative;
+    top: -2px;
+    left: -5px;
+    color: #000;
+    background-color:#fff;
+    padding: 1px 2px;
+    border: 1px solid var(--red);
+    border-radius: 50%;
+    text-align: center;
+    font-size: 0.6rem;
+}
+
+.box3 .your-wishlist  .logo i:hover,.box3 .your-cart  .logo i:hover{
+    color: #79090d;
+}
+.box3 .your-cart ,.box3 .your-wishlist {
+    display: flex;
+    flex-direction: column;    
+    text-decoration: none;
+}
+.cart-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 1px; 
+    margin-top: 20px;
+    color: white;
+}
+
+.cart-table th, .cart-table td {
+    padding-bottom: 5px;
+    text-align: left;
+    white-space: wrap;
+    font-size: 0.8rem;
+    width: 15px;
+    text-align: center;
+}
+.wishlist-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 1px; 
+    margin-top: 20px;
+    color: white;
+}
+
+.wishlist-table th, .wishlist-table td {
+    padding-bottom: 5px;
+    text-align: left;
+    white-space: wrap;
+    font-size: 0.9rem;
+    width: 15px;
+    text-align: center;
+}
+.remove-wishlist {
+    all: unset;
+    cursor: pointer;
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 2px 3px;
+    transition: all 0.3s linear;
+}
+.remove-wishlist:hover {
+    background-color: var(--red);
+}
+
+
+.cart-item {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+.remove-from-cart {
+    all: unset;
+    cursor: pointer;
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 2px 3px;
+    transition: all 0.3s linear;
+}
+.remove-from-cart:hover {
+    background-color: var(--red);
+}
+.cart-item .image img {
+    width: 50px;
+}
+
+
+.cart-footer {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    z-index: 9999;
+    width: 100%;
+}
+.wishlist_footer{
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    z-index: 9999;
+    width: 100%;
+}
+.checkout-btn {
+display: block;
+text-align: center;
+background-color: #28a745;  /* Green button */
+color: white;
+padding: 10px 20px;
+font-size: 16px;
+text-decoration: none;
+margin-top: 10px;
+width: 50%;
+
+}
+
+.checkout-btn:hover {
+background-color: #218838;  /* Darker green on hover */
+}
+.close-cart-btn {
+display: block;
+text-align: center;
+background-color: #dc3545;  /* Red color */
+color: white;
+padding: 10px 20px;
+font-size: 16px;
+text-decoration: none;
+margin-top: 10px;
+width: 50%;
+}
+
+.close-cart-btn:hover {
+background-color: #c82333; 
+}
+
+
+
+.box3 .your-cart .text,.box3 .your-wishlist .text{
+    font-size: 13px;
+}
+.box3 .your-wishlist #wishlist:checked ~ .show-wishlist ,.box3 .your-cart #cart:checked ~ .show-cart{
+    transform: translateX(0);
+}
+
+.box3 .your-wishlist .show-wishlist ,.box3 .your-cart .show-cart{
+    position: fixed;
+    top: 89px;
+    right: 0;
+    background-color: #000;
+    width: 350px;
+    height:calc(100vh - 89px);
+    transform: translateX(100%);
+    transition: all 0.3s linear;  
+    overflow: hidden;
+
+}
+.box3 .your-wishlist .show-wishlist .wishlist-header , .box3 .your-cart .show-cart .cart-header{
+    background-color: #FCC50B;
+    padding-block: 20px;
+    text-align: center;
+}
+.box3 .user .account .al{
+    display: flex;
+    justify-content: center;
+    align-items: center;   text-align: center;
+    text-decoration: none;
+}
+.box3 .user .account{
+    transition: all 0.3s linear;
+}
+.box3 .user .account .al .logo{
+    color: var(--red);
+    font-size: 1.5rem;
+    transition: all 0.3s linear;
+    padding-right: 5px;
+    font-size: 1.5rem;
+}
+.box3 .user .account .logout form button{
+    all: unset;
+    width: 100%;
+    padding-inline: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s linear;
+}
+.box3 .user .account .logout form button:hover{
+    color: rgb(99, 99, 99);
+}
+.box3 .user .account:hover .al .logo{
+    color: #79090d;
+}
+.box3 .user .account .al .text{
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding-block: 5px;
+}
+.box3 .user #account{
+    display: none;
+}
+.box3 .user .detail{
+    position: absolute;
+    background-color: white;
+    padding: 10px;
+    transform: rotatex(90deg);
+    width: 160px;
+    top: 57px;
+    right: 0;
+    line-height: 30px;
+    transition: all 0.3s linear;
+    transform-origin: top;
+}
+
+.box3 .user .detail a{
+   color: black;
+   text-decoration: none;
+   font-size: 1.1rem;
+   font-weight: 500;
+}
+.box3 .user .detail a:hover{
+    color: rgb(99, 99, 99);
+}
+.account:hover > .detail{
+  transform: rotatex(0deg);
+}
+/*  section 1 ends here*/
+/* section2 starts here */
+.card {
+    display: block; 
+}
+
+.card[style*="display: none"] {
+    display: none !important; 
+}
+/* section2 ends here */
+
+/* slider starts here */
+        html{
+            scroll-behavior: smooth;
+            scroll-snap-align: start;
+        }
+        .sliderm{
+            display: flex;
+        }
+        .sliderm .box{
+            background-image: url('../img/background2.png');
+            background-color: transparent;
+            background-blend-mode:overlay;
+            background-position: right;
+            background-repeat:no-repeat;
+            min-width: 100%;
+            background-size: cover;
+            padding-block: 25vh;
+            padding-inline: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: ease-out 40s slid infinite;
+            position: relative;
+        }
+        @keyframes slid{
+            0%,14.3%{
+                transform: translateX(0);
+            }
+            25.3%,33%{
+                transform: translateX(-100%);
+            }
+            50%,66%{
+                transform: translateX(-200%);
+            }
+            80%,100%{
+                transform: translateX(-300%);
+            }
+            
+            
+        }
+        .sliderm #box1{
+            background-image: url('../img/homed.png');
+        }
+        .sliderm #box2{
+            background-image: url('../img/background2.png');
+        }
+        .sliderm #box3{
+            background-image: url('../img/lenovobg.png');
+        }
+        .sliderm #box4{
+            background-image: url('../img/bg3.png');
+        }
+        .sliderm .box .box1{
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            background-color: rgb(255, 255, 255); /* Fallback color */
+            background-color: rgba(255, 255, 255, 0.226); 
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+        }
+
+        .sliderm .box .box1 h1{
+            font-size: clamp(0.8rem, 5vw, 1.5rem);
+        }
+        .sliderm .box .box1 p{
+            font-size: clamp(0.5rem, 5vw, 1.2rem);
+        }
+        .sliderm .box .box1 a{
+            display:inline-block;
+            text-decoration: none;
+            color: black;
+            padding: 8px 15px;
+            background-color: rgb(90, 90, 90);
+            border-radius: 10px;
+            transition: all 0.3s linear;
+            user-select: none;
+        }
+        .sliderm .box .box1 a:hover{
+            background-color: rgb(75, 75, 75);
+        }
+
+
+/* slider ends here */
+
+/* select by brand section starts here  */
+.shop{
+    padding-block: 20px 10px;
+}
+.shop .container{
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: 10px;
+}
+.shop .container .heading{
+    padding-bottom: 20px;
+}
+.shop .container a{
+    text-decoration: none;
+    color: black;
+}
+.shop .container .main{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    transition: all 0.3s linear;
+}
+.shop .container .main .brand{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    
+}
+.shop .container .brand .card{
+    width: 200px;
+    text-align: center;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s linear;
+    background-color: #ffffff;
+    padding: 10px 60px;
+}
+.shop .container .brand {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    transition: all 0.3s linear;
+    justify-content: center;
+}
+/* .shop .container .brand .card {
+    padding-inline: 15px;
+    padding-bottom: 20px;
+} */
+.shop .container .brand .card .logo{
+    width: 50px;
+    height: 100%;
+    
+}
+
+.shop .container .brand .card .logo img{
+    width: 100%;
+    object-fit:contain;
+    height: 100%;
+    transition: all 0.3s linear;
+    filter: grayscale(0%);
+}
+.shop .container .brand .card #logo1 {
+    width: 70px;
+    object-fit: contain;
+}
+.shop .container .brand .card .text{
+    padding-top: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: all 0.3s linear;
+}
+.shop .container .brand .card:hover{
+    
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 
+                0 -4px 8px rgba(0, 0, 0, 0.1), 
+                4px 0 8px rgba(0, 0, 0, 0.1),
+                -4px 0 8px rgba(0, 0, 0, 0.1); 
+}
+.shop .container .brand .card:hover .logo img {
+    transform: scale(1.1);
+    filter: grayscale(0%);
+}
+.shop .container .brand:hover{
+    filter: grayscale(0%);
+
+}
+/* .shop .container .brand:hover > :not(:hover){
+    filter: grayscale(100%);
+} */
+.shop .container .brand .card:hover .text{
+    color: #D10024;
+}
+/* select by brand section ends here */
+/*  new product section starts here */
+.new-product{
+    padding-bottom: 10px;
+}
+.new-product .ncontainer {
+    overflow: hidden;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 10px;
+}
+.new-product .ncontainer h2{
+    margin-BLOCK: 10px;
+    margin-left: 10px;
+    padding-bottom: 20px;
+    user-select: none;
+}
+.new-product .ncontainer .slider{
+    display: flex;
+    gap: 11px;
+    animation: infinite ease 30s animate;
+    position: relative;
+    animation-play-state: running;
+}
+
+.new-product .ncontainer .slider:hover{
+    animation-play-state: paused;
+}
+@keyframes animate{
+    0%{
+        transform: translateX(0px);
+    }
+    10%{
+        transform: translateX(0px);
+    }
+    
+    20%{
+        transform: translateX(calc((-25.3% + 3px) * 1));
+    }
+    30%{
+        transform: translateX(calc((-25.3% + 3px) * 1));
+    }
+    40%{
+        transform: translateX(calc((-25.3% + 3px)* 2));
+    }
+    50%{
+        transform: translateX(calc((-25.3% + 3px)* 2));
+    }
+    60%{
+        transform: translateX(calc((-25.3% + 3px) * 3));
+    }
+    70%{
+        transform: translateX(calc((-25.3% + 3px) * 3));
+    }
+    80%{
+        transform: translateX(calc((-25.3% + 3px) * 4));
+    }
+    90%{
+        transform: translateX(calc((-25.3% + 3px) * 4));
+    }
+    95%{
+        transform: translateX(calc((-25.3% + 3px) * 5));
+    }
+    100%{
+        transform: translateX(calc((-25.3% + 3px) * 5));
+    }
+
+}
+.new-product .slider .card{
+    min-width: calc(25% - 10px);
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s linear;
+    line-height: 25PX 
+}
+.new-product .slider .card .img{
+    width: 100%;
+    height: 230px;
+    overflow: hidden;  
+    padding: 5px;
+    background-image: linear-gradient(150deg, #9d9dfa, #ff9a9e);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+
+}
+.new-product .slider .card .img img{
+    width: 95%;
+    height: 230px;
+    object-fit: cover;
+    transition: 0.3s linear;
+}
+/* .new-product .slider .card .img img:hover{
+    transform: scale(1.1) rotate(3deg);
+} */
+.new-product .slider .card .content{
+    padding: 10px;
+}
+.new-product .slider .card .content .name{
+    background-color:#FCC50B;
+    transform:  translateY(-5px);
+    text-align: center;
+    padding: 3px 2px;
+    border-radius: 20px;
+}
+.new-product .slider .card .content .name h3{
+    white-space: nowrap;
+    font-size: clamp(0.845em, 1.3vw, 1.1em);
+}
+.new-product .slider .card:hover{
+                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 
+                0 -4px 8px rgba(0, 0, 0, 0.1), 
+                4px 0 8px rgba(0, 0, 0, 0.1), 
+                -4px 0 8px rgba(0, 0, 0, 0.1); 
+}
+
+.new-product .slider .card hr{
+    max-width: 99%;
+    margin-left: 0.5%;
+    border-color: rgb(252, 252, 252);
+    height: 0px;
+    margin-block: 5px;
+}
+.new-product .slider .card .buttoncw{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 10px;
+    
+}
+.new-product .slider .card button{
+    all: unset;
+   
+    border-radius: 50px;
+    
+}
+.new-product .slider .card #add-to-wishlist{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+}
+.new-product .slider .card #add-to-wishlist i {
+    color: black; 
+    transition: 0.3s linear;
+    font-size: 1.2rem;
+    text-align: center;
+}
+.new-product .slider .card  #add-to-cart{
+     border: 1px solid black;
+     padding: 0px 20px;
+     transition: all 0.3s linear;
+}
+.new-product .slider .buttoncw:hover{
+    transition: 0.3s linear;
+}
+.new-product .slider .card:hover{
+    transform-origin: left; 
+}
+.new-product .slider .card #add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+    transition: 0.3s linear;
+}
+.new-product .slider .card #add-to-wishlist:hover i{
+    color: #D01920;
+    transition: 0.3s linear;
+}
+
+.content select{
+    background-color: var(--bg-color);
+    border: 1px solid black;
+    padding: 1px 2px;
+    border-radius: 4px;
+}
+/* new product sectoin ends here */
+/* trending product section start here */
+
+.trending-product{
+    padding-block: 10px 10px;
+}
+.trending-product .ncontainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: 10px;
+    
+}
+.trending-product .ncontainer .heading{
+    padding-bottom: 30px;
+    user-select: none;
+}
+.trending-product .ncontainer .main{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    grid-gap: 10px;
+}
+.trending-product .ncontainer .main .card{
+    /* max-width: calc(25% - 10px); */
+    min-width: 270px;
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s linear;
+    line-height: 25PX 
+}
+.card .content input{
+    display: none;   
+}
+.card .content input:checked + label{
+    background-color: rgb(229, 229, 229);
+}
+.card .content label{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1px 2px;
+}
+.trending-product .ncontainer .main .card .content{
+    padding: 10px;
+    margin-top: -20px;
+}
+.trending-product .ncontainer .main .card .content .name{
+    background-color:#FCC50B;
+    transform:  translateY(-8px);
+    text-align: center;
+    padding: 3px 2px;
+    border-radius: 20px;
+}
+.trending-product .ncontainer .main .card .content .name h3{
+    white-space: nowrap;
+    font-size: clamp(0.845em, 1.3vw, 1.1em);
+}
+.trending-product .ncontainer .main .card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 
+     -4px 8px rgba(0, 0, 0, 0.1), 
+    px 0 8px rgba(0, 0, 0, 0.1), 
+    4px 0 8px rgba(0, 0, 0, 0.1); 
+}
+.trending-product .ncontainer .main .card .img{
+    width: 100%;
+    height: 230px;
+    overflow: hidden;  
+    padding: 5px;
+    background-image: linear-gradient(150deg, #9d9dfa, #ff9a9e);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+
+}
+.trending-product .ncontainer .main .card .img img{
+    width: 95%;
+    height: 230px;
+    object-fit: cover;
+    transition: 0.3s linear;
+}
+.trending-product .ncontainer .main .card hr{
+    max-width: 99%;
+    margin-left: 0.5%;
+    border-color: rgb(252, 252, 252);
+    height: 0px;
+    margin-block: 5px;
+}
+.trending-product .ncontainer .main .card .buttoncw{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 10px;
+}
+.trending-product .ncontainer .main .card button{
+    all: unset;  
+    border-radius: 50px;
+}
+.trending-product .ncontainer .main .card #add-to-wishlist{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+}
+.trending-product .ncontainer .main .card .add-to-wishlist-btn{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+    transition: 0.3s linear;
+}
+.trending-product .ncontainer .main .card .add-to-wishlist-btn:hover{
+    color: #D01920;
+}
+.trending-product .ncontainer .main .card .add-to-cart{
+    border: 1px solid black;
+    padding: 0px 20px;
+    transition: all 0.3s linear;
+}
+.trending-product .ncontainer .main .card .add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+}
+.trending-product .ncontainer .main .card #add-to-wishlist i {
+    color: black; 
+    border-radius: 50%;
+    transition: 0.3s linear;
+    font-size: 1.2rem;
+}
+.trending-product .ncontainer .main .card  #add-to-cart{
+     border: 1px solid black;
+     padding: 0px 20px;
+     transition: all 0.3s linear;
+}
+.trending-product .ncontainer .main .buttoncw:hover{
+    transition: 0.3s linear;
+}
+.trending-product .ncontainer .main .card:hover{
+    transform-origin: left; 
+}
+.trending-product .ncontainer .main .card #add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+    transition: 0.3s linear;
+}
+.trending-product .ncontainer .main .card #add-to-wishlist:hover i{
+    color: #D01920;
+    transition: 0.3s linear;
+}
+/* trending product section ends here */
+/* apple section starts here */
+ .apple{
+    padding-block: 10px;
+}
+ .apple .ncontainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: 10px;
+}
+ .apple .ncontainer .heading{
+    padding-bottom: 30px;
+    user-select: none;
+}
+ .apple .ncontainer .main{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    grid-gap: 10px;
+}
+ .apple .ncontainer .main .card{
+    /* max-width: calc(25% - 10px); */
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s linear;
+    line-height: 25PX 
+}
+ .apple .ncontainer .main .card .content{
+    padding: 10px;
+    margin-top:-10px;
+
+}
+ .apple .ncontainer .main .card .content .name{
+    background-color:#FCC50B;
+    transform:  translateY(-8px);
+    text-align: center;
+    padding: 3px 2px;
+    border-radius: 20px;
+}
+ .apple .ncontainer .main .card .content .name h3{
+    white-space: nowrap;
+    font-size: clamp(0.845em, 1.3vw, 1.1em);
+}
+ .apple .ncontainer .main .card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 
+     -4px 8px rgba(0, 0, 0, 0.1), 
+    px 0 8px rgba(0, 0, 0, 0.1), 
+    4px 0 8px rgba(0, 0, 0, 0.1); 
+}
+ .apple .ncontainer .main .card .img{
+    width: 100%;
+    height: 230px;
+    overflow: hidden;  
+    padding: 5px;
+    background-image: linear-gradient(150deg, #9d9dfa, #ff9a9e);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+
+}
+ .apple .ncontainer .main .card .img img{
+    width: 95%;
+    height: 230px;
+    object-fit: cover;
+    transition: 0.3s linear;
+}
+ /* .apple .ncontainer .main .card .img img:hover{
+    transform: scale(1.1) rotate(3deg);
+} */
+ .apple .ncontainer .main .card hr{
+    max-width: 99%;
+    margin-left: 0.5%;
+    border-color: rgb(252, 252, 252);
+    height: 0px;
+    margin-block: 5px;
+}
+ .apple .ncontainer .main .card .buttoncw{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 10px;
+}
+ .apple .ncontainer .main .card button{
+    all: unset;
+   
+    border-radius: 50px;
+    
+}
+.apple .ncontainer .main .card #add-to-wishlist{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+}
+ .apple .ncontainer .main .card #add-to-wishlist i {
+    color: black; 
+    border-radius: 50%;
+    transition: 0.3s linear;
+    font-size: 1.2rem;
+}
+ .apple .ncontainer .main .card  #add-to-cart{
+     border: 1px solid black;
+     padding: 0px 20px;
+     transition: all 0.3s linear;
+}
+ .apple .ncontainer .main .buttoncw:hover{
+    transition: 0.3s linear;
+}
+ .apple .ncontainer .main .card:hover{
+    transform-origin: left; 
+}
+ .apple .ncontainer .main .card #add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+    transition: 0.3s linear;
+}
+ .apple .ncontainer .main .card #add-to-wishlist:hover i{
+    color: #D01920;
+    transition: 0.3s linear;
+}
+.apple .ncontainer .main .card .add-to-wishlist-btn{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+    transition: 0.3s linear;
+}
+.apple .ncontainer .main .card .add-to-wishlist-btn:hover{
+    color: #D01920;
+}
+.apple .ncontainer .main .card .add-to-cart{
+    border: 1px solid black;
+    padding: 0px 20px;
+    transition: all 0.3s linear;
+}
+.apple .ncontainer .main .card .add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+}
+/* apple section ends here */
+/* lenovo section starts here */
+.lenovo{
+    padding-block: 10px;
+}
+ .lenovo .ncontainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: 10px;
+    
+}
+ .lenovo .ncontainer .heading{
+    padding-bottom: 30px;
+    user-select: none;
+}
+ .lenovo .ncontainer .main{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    grid-gap: 10px;
+}
+ .lenovo .ncontainer .main .card{
+    /* max-width: calc(25% - 10px); */
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s linear;
+    line-height: 25PX 
+}
+ .lenovo .ncontainer .main .card .content{
+    padding: 10px;
+    margin-top:-10px;
+}
+ .lenovo .ncontainer .main .card .content .name{
+    background-color:#FCC50B;
+    transform:  translateY(-8px);
+    text-align: center;
+    padding: 3px 2px;
+    border-radius: 20px;
+}
+ .lenovo .ncontainer .main .card .content .name h3{
+    white-space: nowrap;
+    font-size: clamp(0.845em, 1.3vw, 1.1em);
+}
+ .lenovo .ncontainer .main .card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 
+     -4px 8px rgba(0, 0, 0, 0.1), 
+    px 0 8px rgba(0, 0, 0, 0.1), 
+    4px 0 8px rgba(0, 0, 0, 0.1); 
+}
+ .lenovo .ncontainer .main .card .img{
+    width: 100%;
+    height: 230px;
+    overflow: hidden;  
+    padding: 5px;
+    background-image: linear-gradient(150deg, #9d9dfa, #ff9a9e);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+
+}
+ .lenovo .ncontainer .main .card .img img{
+    width: 95%;
+    height: 230px;
+    object-fit: cover;
+    transition: 0.3s linear;
+}
+.lenovo .ncontainer .main .card .add-to-wishlist-btn{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+    transition: 0.3s linear;
+}
+.lenovo .ncontainer .main .card .add-to-wishlist-btn:hover{
+    color: #D01920;
+}
+.lenovo .ncontainer .main .card .add-to-cart{
+    border: 1px solid black;
+    padding: 0px 20px;
+    transition: all 0.3s linear;
+}
+.lenovo .ncontainer .main .card .add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+}
+ /* .lenovo .ncontainer .main .card .img img:hover{
+    transform: scale(1.1) rotate(3deg);
+} */
+ .lenovo .ncontainer .main .card hr{
+    max-width: 99%;
+    margin-left: 0.5%;
+    border-color: rgb(252, 252, 252);
+    height: 0px;
+    margin-block: 5px;
+}
+ .lenovo .ncontainer .main .card .buttoncw{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 10px;
+}
+ .lenovo .ncontainer .main .card button{
+    all: unset;
+   
+    border-radius: 50px;
+    
+}
+.lenovo .ncontainer .main .card #add-to-wishlist{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+}
+ .lenovo .ncontainer .main .card #add-to-wishlist i {
+    color: black; 
+    border-radius: 50%;
+    transition: 0.3s linear;
+    font-size: 1.2rem;
+}
+ .lenovo .ncontainer .main .card  #add-to-cart{
+     border: 1px solid black;
+     padding: 0px 20px;
+     transition: all 0.3s linear;
+}
+ .lenovo .ncontainer .main .buttoncw:hover{
+    transition: 0.3s linear;
+}
+ .lenovo .ncontainer .main .card:hover{
+    transform-origin: left; 
+}
+ .lenovo .ncontainer .main .card #add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+    transition: 0.3s linear;
+}
+ .lenovo .ncontainer .main .card #add-to-wishlist:hover i{
+    color: #D01920;
+    transition: 0.3s linear;
+}
+/* lenovo section ends here */
+/* dell section starts here */
+.dell{
+    padding-block: 10px;
+}
+ .dell .ncontainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: 10px;
+    
+}
+ .dell .ncontainer .heading{
+    padding-bottom: 30px;
+    user-select: none;
+}
+ .dell .ncontainer .main{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    grid-gap: 10px;
+}
+ .dell .ncontainer .main .card{
+    /* max-width: calc(25% - 10px); */
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s linear;
+    line-height: 25PX 
+}
+ .dell .ncontainer .main .card .content{
+    padding: 10px;
+    margin-top:-10px;
+}
+ .dell .ncontainer .main .card .content .name{
+    background-color:#FCC50B;
+    transform:  translateY(-8px);
+    text-align: center;
+    padding: 3px 2px;
+    border-radius: 20px;
+}
+ .dell .ncontainer .main .card .content .name h3{
+    white-space: nowrap;
+    font-size: clamp(0.845em, 1.3vw, 1.1em);
+}
+ .dell .ncontainer .main .card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), /* Top shadow */
+     -4px 8px rgba(0, 0, 0, 0.1), /* Bottom shadow */
+    px 0 8px rgba(0, 0, 0, 0.1), /* Right shadow */
+    4px 0 8px rgba(0, 0, 0, 0.1); /* Left shadow */
+}
+ .dell .ncontainer .main .card .img{
+    width: 100%;
+    height: 230px;
+    overflow: hidden;  
+    padding: 5px;
+    background-image: linear-gradient(150deg, #9d9dfa, #ff9a9e);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+
+}
+ .dell .ncontainer .main .card .img img{
+    width: 95%;
+    height: 230px;
+    object-fit: cover;
+    transition: 0.3s linear;
+}
+ /* .dell .ncontainer .main .card .img img:hover{
+    transform: scale(1.1) rotate(3deg);
+} */
+ .dell .ncontainer .main .card hr{
+    max-width: 99%;
+    margin-left: 0.5%;
+    border-color: rgb(252, 252, 252);
+    height: 0px;
+    margin-block: 5px;
+}
+ .dell .ncontainer .main .card .buttoncw{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 10px;
+}
+ .dell .ncontainer .main .card button{
+    all: unset;
+   
+    border-radius: 50px;
+    
+}
+.dell .ncontainer .main .card  #add-to-wishlist{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+}
+ .dell .ncontainer .main .card #add-to-wishlist i {
+    color: black; 
+    border-radius: 50%;
+    transition: 0.3s linear;
+    font-size: 1.2rem;
+}
+ .dell .ncontainer .main .card  #add-to-cart{
+     border: 1px solid black;
+     padding: 0px 20px;
+     transition: all 0.3s linear;
+}
+ .dell .ncontainer .main .buttoncw:hover{
+    transition: 0.3s linear;
+}
+ .dell .ncontainer .main .card:hover{
+    transform-origin: left; 
+}
+ .dell .ncontainer .main .card #add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+    transition: 0.3s linear;
+}
+ .dell .ncontainer .main .card #add-to-wishlist:hover i{
+    color: #D01920;
+    transition: 0.3s linear;
+}
+.dell .ncontainer .main .card .add-to-wishlist-btn{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+    transition: 0.3s linear;
+}
+.dell .ncontainer .main .card .add-to-wishlist-btn:hover{
+    color: #D01920;
+}
+.dell .ncontainer .main .card .add-to-cart{
+    border: 1px solid black;
+    padding: 0px 20px;
+    transition: all 0.3s linear;
+}
+.dell .ncontainer .main .card .add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+}
+
+/* dell section ends here */
+/* hp section starts here */
+.hp{
+    padding-block: 10px;
+}
+ .hp .ncontainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: 10px;
+    
+}
+ .hp .ncontainer .heading{
+    padding-bottom: 30px;
+    user-select: none;
+}
+ .hp .ncontainer .main{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    grid-gap: 10px;
+}
+ .hp .ncontainer .main .card{
+    /* max-width: calc(25% - 10px); */
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s linear;
+    line-height: 25PX 
+}
+ .hp .ncontainer .main .card .content{
+    padding: 10px;
+    margin-top:-10px;
+}
+ .hp .ncontainer .main .card .content .name{
+    background-color:#FCC50B;
+    transform:  translateY(-8px);
+    text-align: center;
+    padding: 3px 2px;
+    border-radius: 20px;
+}
+ .hp .ncontainer .main .card .content .name h3{
+    white-space: nowrap;
+    font-size: clamp(0.845em, 1.3vw, 1.1em);
+}
+ .hp .ncontainer .main .card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), /* Top shadow */
+     -4px 8px rgba(0, 0, 0, 0.1), /* Bottom shadow */
+    px 0 8px rgba(0, 0, 0, 0.1), /* Right shadow */
+    4px 0 8px rgba(0, 0, 0, 0.1); /* Left shadow */
+}
+ .hp .ncontainer .main .card .img{
+    width: 100%;
+    height: 230px;
+    overflow: hidden;  
+    padding: 5px;
+    background-image: linear-gradient(150deg, #9d9dfa, #ff9a9e);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+
+}
+ .hp .ncontainer .main .card .img img{
+    width: 95%;
+    height: 230px;
+    object-fit: cover;
+    transition: 0.3s linear;
+}
+ /* .hp .ncontainer .main .card .img img:hover{
+    transform: scale(1.1) rotate(3deg);
+} */
+ .hp .ncontainer .main .card hr{
+    max-width: 99%;
+    margin-left: 0.5%;
+    border-color: rgb(252, 252, 252);
+    height: 0px;
+    margin-block: 5px;
+}
+ .hp .ncontainer .main .card .buttoncw{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 10px;
+}
+ .hp .ncontainer .main .card button{
+    all: unset;
+   
+    border-radius: 50px;
+    
+}
+.hp .ncontainer .main .card #add-to-wishlist{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+}
+ .hp .ncontainer .main .card #add-to-wishlist i {
+    color: black; 
+    border-radius: 50%;
+    transition: 0.3s linear;
+    font-size: 1.2rem;
+}
+ .hp .ncontainer .main .card  #add-to-cart{
+     border: 1px solid black;
+     padding: 0px 20px;
+     transition: all 0.3s linear;
+}
+ .hp .ncontainer .main .buttoncw:hover{
+    transition: 0.3s linear;
+}
+ .hp .ncontainer .main .card:hover{
+    transform-origin: left; 
+}
+ .hp .ncontainer .main .card #add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+    transition: 0.3s linear;
+}
+ .hp .ncontainer .main .card #add-to-wishlist:hover i{
+    color: #D01920;
+    transition: 0.3s linear;
+}
+.hp .ncontainer .main .card .add-to-wishlist-btn{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+    transition: 0.3s linear;
+}
+.hp .ncontainer .main .card .add-to-wishlist-btn:hover{
+    color: #D01920;
+}
+.hp .ncontainer .main .card .add-to-cart{
+    border: 1px solid black;
+    padding: 0px 20px;
+    transition: all 0.3s linear;
+}
+.hp .ncontainer .main .card .add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+}
+/* hp section ends here */
+/* microsoft section starts here */
+.microsoft{
+    padding-block: 10px;
+}
+ .microsoft .ncontainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: 10px;
+    
+}
+ .microsoft .ncontainer .heading{
+    padding-bottom: 30px;
+    user-select: none;
+}
+ .microsoft .ncontainer .main{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    grid-gap: 10px;
+}
+ .microsoft .ncontainer .main .card{
+    /* max-width: calc(25% - 10px); */
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s linear;
+    line-height: 25PX 
+}
+ .microsoft .ncontainer .main .card .content{
+    padding: 10px;
+    margin-top:-10px;
+}
+ .microsoft .ncontainer .main .card .content .name{
+    background-color:#FCC50B;
+    transform:  translateY(-8px);
+    text-align: center;
+    padding: 3px 2px;
+    border-radius: 20px;
+}
+ .microsoft .ncontainer .main .card .content .name h3{
+    white-space: nowrap;
+    font-size: clamp(0.845em, 1.3vw, 1.1em);
+}
+ .microsoft .ncontainer .main .card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 
+     -4px 8px rgba(0, 0, 0, 0.1),
+    px 0 8px rgba(0, 0, 0, 0.1),
+    4px 0 8px rgba(0, 0, 0, 0.1);
+}
+ .microsoft .ncontainer .main .card .img{
+    width: 100%;
+    height: 230px;
+    overflow: hidden;  
+    padding: 5px;
+    background-image: linear-gradient(150deg, #9d9dfa, #ff9a9e);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+
+}
+ .microsoft .ncontainer .main .card .img img{
+    width: 95%;
+    height: 230px;
+    object-fit: cover;
+    transition: 0.3s linear;
+}
+ /* .microsoft .ncontainer .main .card .img img:hover{
+    transform: scale(1.1) rotate(3deg);
+} */
+ .microsoft .ncontainer .main .card hr{
+    max-width: 99%;
+    margin-left: 0.5%;
+    border-color: rgb(252, 252, 252);
+    height: 0px;
+    margin-block: 5px;
+}
+ .microsoft .ncontainer .main .card .buttoncw{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 10px;
+}
+ .microsoft .ncontainer .main .card button{
+    all: unset;
+   
+    border-radius: 50px;
+    
+}
+.microsoft .ncontainer .main .card #add-to-wishlist{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+}
+ .microsoft .ncontainer .main .card #add-to-wishlist i {
+    color: black; 
+    border-radius: 50%;
+    transition: 0.3s linear;
+    font-size: 1.2rem;
+}
+ .microsoft .ncontainer .main .card  #add-to-cart{
+     border: 1px solid black;
+     padding: 0px 20px;
+     transition: all 0.3s linear;
+}
+ .microsoft .ncontainer .main .buttoncw:hover{
+    transition: 0.3s linear;
+}
+ .microsoft .ncontainer .main .card:hover{
+    transform-origin: left; 
+}
+ .microsoft .ncontainer .main .card #add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+    transition: 0.3s linear;
+}
+ .microsoft .ncontainer .main .card #add-to-wishlist:hover i{
+    color: #D01920;
+    transition: 0.3s linear;
+}
+.microsoft .ncontainer .main .card .add-to-wishlist-btn{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+    transition: 0.3s linear;
+}
+.microsoft .ncontainer .main .card .add-to-wishlist-btn:hover{
+    color: #D01920;
+}
+.microsoft .ncontainer .main .card .add-to-cart{
+    border: 1px solid black;
+    padding: 0px 20px;
+    transition: all 0.3s linear;
+}
+.microsoft .ncontainer .main .card .add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+}
+/* microsoft section ends here */
+/* search section starts here */
+.search{
+    padding-block: 10px 10px;
+}
+.search .ncontainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: 10px;
+    
+}
+.search .ncontainer .heading{
+    padding-bottom: 30px;
+    user-select: none;
+}
+.search .ncontainer .main{
+    /* display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, auto));
+    grid-gap: 10px; */
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.search .ncontainer .main .card{
+    /* max-width: calc(25% - 10px); */
+    width: 350px;
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s linear;
+    line-height: 25PX 
+}
+.card .content input{
+    display: none;   
+}
+.card .content input:checked + label{
+    background-color: rgb(229, 229, 229);
+}
+.card .content label{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1px 2px;
+}
+.search .ncontainer .main .card .content{
+    padding: 10px;
+    margin-top: -20px;
+}
+.search .ncontainer .main .card .content .name{
+    background-color:#FCC50B;
+    transform:  translateY(-8px);
+    text-align: center;
+    padding: 3px 2px;
+    border-radius: 20px;
+}
+.search .ncontainer .main .card .content .name h3{
+    white-space: nowrap;
+    font-size: clamp(0.845em, 1.3vw, 1.1em);
+}
+.search .ncontainer .main .card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 
+     -4px 8px rgba(0, 0, 0, 0.1), 
+    px 0 8px rgba(0, 0, 0, 0.1), 
+    4px 0 8px rgba(0, 0, 0, 0.1); 
+}
+.search .ncontainer .main .card .img{
+    width: 100%;
+    height: 230px;
+    overflow: hidden;  
+    padding: 5px;
+    background-image: linear-gradient(150deg, #9d9dfa, #ff9a9e);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+
+}
+.search .ncontainer .main .card .img img{
+    width: 95%;
+    height: 230px;
+    object-fit: cover;
+    transition: 0.3s linear;
+}
+.search .ncontainer .main .card hr{
+    max-width: 99%;
+    margin-left: 0.5%;
+    border-color: rgb(252, 252, 252);
+    height: 0px;
+    margin-block: 5px;
+}
+.search .ncontainer .main .card .buttoncw{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 10px;
+}
+.search .ncontainer .main .card button{
+    all: unset;  
+    border-radius: 50px;
+}
+.search .ncontainer .main .card #add-to-wishlist{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+}
+.search .ncontainer .main .card #add-to-wishlist i {
+    color: black; 
+    border-radius: 50%;
+    transition: 0.3s linear;
+    font-size: 1.2rem;
+}
+.search .ncontainer .main .card  #add-to-cart{
+     border: 1px solid black;
+     padding: 0px 20px;
+     transition: all 0.3s linear;
+}
+.search .ncontainer .main .buttoncw:hover{
+    transition: 0.3s linear;
+}
+.search .ncontainer .main .card:hover{
+    transform-origin: left; 
+}
+.search .ncontainer .main .card #add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+    transition: 0.3s linear;
+}
+.search .ncontainer .main .card #add-to-wishlist:hover i{
+    color: #D01920;
+    transition: 0.3s linear;
+}
+.search .ncontainer .main .card .add-to-wishlist-btn{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+    transition: 0.3s linear;
+}
+.search .ncontainer .main .card .add-to-wishlist-btn:hover{
+    color: #D01920;
+}
+.search .ncontainer .main .card .add-to-cart{
+    border: 1px solid black;
+    padding: 0px 20px;
+    transition: all 0.3s linear;
+}
+.search .ncontainer .main .card .add-to-cart:hover{
+    color: white;
+    background-color: #D01920;
+}
+/* search section ends here */
+
+
+/*  footer search section starts here */
+.footer{    
+    background-color: black;
+    color: white;
+    padding: 40px 0;
+    padding-inline: 20px;
+    padding-block: 40px;
+}
+.footer .container{
+    max-width: 1400px;
+    margin: 0 auto;
+
+    
+}
+.footer .container a{
+    text-decoration: none;
+}
+.footer .container .mbox1{
+    border-bottom: 1px solid #777676;
+    padding-bottom: 20px;
+    
+    
+    display: flex;
+    gap: 20px;
+}
+.footer .container .box1{
+    max-width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom:10px ;
+}
+.footer .container .box1 .logo{
+    font-size: 1.7rem;
+    font-weight: 600;
+}
+.footer .container .box1 .loc{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.footer .container .box1 .loc i{
+    color: #b6b6b6;
+}
+.footer .container .box1 .loc p{
+    font-size: 1rem;
+    color: #f06f06;
+    font-weight: 400;
+}
+.footer .container .box2 .heading{
+    font-size: 1.1rem;
+    padding-block: 5px;
+    font-weight: 500;
+    align-items: center;
+}
+.footer .container .box1 .text{
+    padding-block: 10px;
+}
+.footer .container .box1 .loca{
+    padding-block: 10px;
+}
+.footer .container .box2 .heading i{
+    font-size: 1.5rem;
+}
+.footer .container .box2 .location .loca{
+    display: flex;
+    flex-direction: column;
+    padding-block: 10px;
+}
+.footer .container .box2 .location .loca p{
+    font-size: 1.3rem;
+    color: #f06f06;
+    font-weight: 500;
+}
+.footer .container .box2 .location .loca .loched {
+    display: inline-block;
+    font-size: 1.3rem;
+    color: #FB923C;
+    font-weight: 500;
+}
+.footer .container .mbox2 {
+    display: flex;
+    gap: 20px;
+    padding-top: 30px;
+    justify-content: space-between;
+}
+.footer .container .mbox2 .box21 p{
+    font-size: 1rem;
+}
+.footer .container .mbox2 .box22 ul{
+    display: flex;
+    list-style: none;
+    gap: 10px;
+}
+.footer .container .mbox2 .box22 ul li a{
+    display: inline-block;
+    color: #ffffff;
+    font-size: 1.6rem;
+    padding:10px 14px;
+    border-radius: 50%;
+    background-color: #6F798A;
+}
+.footer .container .mbox2 .box22 ul li a div{
+    width: 25px;
+    border-radius: 50%;
+    text-align: center;
+
+
+}
+/* footer section ends here */
+.content .buttoncw #addToWishlistBtn{
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 25% ;
+    display: flex;
+    align-items: center;
+    transition: 0.3s linear;
+    }
+    .content .buttoncw #addToWishlistBtn:hover{
+        color: #D01920;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width:1000px){
+    .sliderm .box{
+        padding-block: 20vh;
+    }
+}
+
+@media screen and (max-width:850px){
+    
+    .sliderm .box{
+        padding-block: 15vh;
+    } 
+    .sliderm .box .box1{
+        width: 80%;
+
+    }
+    .header{
+        padding: 10px;
+    }
+    .box3 .user .account p{
+        display: none;
+    }
+    .box3 .user .account a p:nth-child(2){
+        display: block;
+    }
+    .new-product .slider .card{
+        min-width: calc(33.33% - 10px);
+    }
+    @keyframes animate{
+    0%{
+        transform: translateX(0px);
+    }
+    10%{
+        transform: translateX(0px);
+    }
+    
+    20%{
+        transform: translateX(calc((-33.33% + 0px) * 1));
+    }
+    30%{
+        transform: translateX(calc((-33.33% + 0px) * 1));
+    }
+    40%{
+        transform: translateX(calc((-33.33% + 0px)* 2));
+    }
+    50%{
+        transform: translateX(calc((-33.33% + 0px)* 2));
+    }
+    60%{
+        transform: translateX(calc((-33.33% + 0px) * 3));
+    }
+    70%{
+        transform: translateX(calc((-33.33% + 0px) * 3));
+    }
+    80%{
+        transform: translateX(calc((-33.33% + 0px) * 4));
+    }
+    90%{
+        transform: translateX(calc((-33.33% + 0px) * 4));
+    }
+    95%{
+        transform: translateX(calc((-33.33% + 0px) * 5));
+    }
+    100%{
+        transform: translateX(calc((-33.33% + 0px) * 5));
+    }
+    }
+    /* .trending-product .ncontainer .main{
+        grid-template-columns: repeat(3, 1fr);
+    } */
+    .account:hover > .detail{
+        transform: rotatex(90deg);
+      }
+    #account:checked ~ .detail{
+        transform: rotatex(0deg);
+    }
+    .footer{
+        padding-inline: 10px;
+    }
+    .footer .container .mbox1{
+        flex-direction:column ;
+        gap: 10px;
+    }
+    .footer .container .box1{
+        max-width: 100%;
+        padding: 0px;
+        padding-top: 0px;
+        flex-direction: row;
+        align-items: start;
+    }
+    .footer .container .box1 .loc{
+        
+        padding-block: 10px 0px;
+    }
+    .footer .container .mbox2{
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+}
+@media screen and (max-width:650px){
+    .sliderm .box{
+        padding-block: 5vh;
+        ;
+    }
+    .sliderm .box .box1{
+        width: 100%;
+
+    }
+    .header{
+        transition: all 0.3s linear;
+        padding-block: 16px;
+    }
+    .header:has(.box2 #search:checked){
+       height: 105px;  
+       padding-top: 0px;
+    }
+    .header:has(.box2 #search:checked)  .box3 .your-cart .show-cart {
+        top: 125px;
+        height:calc(100vh - 125px);
+     }
+     
+     .header:has(.box2 #search:checked)  .box3 .your-wishlist .show-wishlist {
+        top: 125px;
+        height:calc(100vh - 125px);
+     }
+    .box2 .searchlogo{
+        display: inherit;
+        padding-inline: 10px;
+    }
+    .box2 #search:checked ~ .search{
+        display: inherit;
+    }
+    .header .box2 .search{
+        position: absolute;
+        top : 80px;
+        right: 50%;
+        transform: translatex(50%);
+        display: none;
+    }
+    .header .box2 {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+    }
+    .new-product .slider .card{
+        min-width: calc(50% - 10px);
+    }
+    @keyframes animate{
+        0%{
+            transform: translateX(0px);
+        }
+        10%{
+            transform: translateX(0px);
+        }
+        
+        20%{
+            transform: translateX(calc((-50% + 0px) * 1));
+        }
+        30%{
+            transform: translateX(calc((-50% + 0px) * 1));
+        }
+        40%{
+            transform: translateX(calc((-50% + 0px)* 2));
+        }
+        50%{
+            transform: translateX(calc((-50% + 0px)* 2));
+        }
+        60%{
+            transform: translateX(calc((-50% + 0px) * 3));
+        }
+        70%{
+            transform: translateX(calc((-50% + 0px) * 3));
+        }
+        80%{
+            transform: translateX(calc((-50% + 0px) * 4));
+        }
+        90%{
+            transform: translateX(calc((-50% + 0px) * 4));
+        }
+        95%{
+            transform: translateX(calc((-50% + 0px) * 5));
+        }
+        100%{
+            transform: translateX(calc((-50% + 0px) * 5));
+        }
+    
+    }
+    
+}
+@media screen and (max-width:570px){
+    .trending-product .ncontainer .main,.apple .ncontainer .main,.lenovo .ncontainer .main,.dell .ncontainer .main,.hp .ncontainer .main,.microsoft .ncontainer .main {
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+    }
+    .trending-product .ncontainer .main .card{
+        min-width: 230px;
+    }
+}
+@media screen and (max-width:430px){
+   
+    
+    .box3 .your-wishlist .logo i , .box3 .your-cart  .logo i,.box2 .searchlogo i,.box3 .user .account {
+        font-size: 1.3rem;
+    }
+    .box3 .user .account i{
+        font-size: 1.26rem;
+    }
+    .header .box1 .logo{
+        font-size: clamp(1rem, 1.2vw, 2rem);
+        font-weight: 700;
+    }
+    .header .box1 .logo span{
+        font-size: 2rem;
+    }
+    .new-product .slider .card{
+        min-width: calc(100% - 10px);
+    }
+    @keyframes animate{
+        0%{
+            transform: translateX(0px);
+        }
+        10%{
+            transform: translateX(0px);
+        }
+        
+        20%{
+            transform: translateX(calc((-100% + 0px) * 1));
+        }
+        30%{
+            transform: translateX(calc((-100% + 0px) * 1));
+        }
+        40%{
+            transform: translateX(calc((-100% + 0px)* 2));
+        }
+        50%{
+            transform: translateX(calc((-100% + 0px)* 2));
+        }
+        60%{
+            transform: translateX(calc((-100% + 0px) * 3));
+        }
+        70%{
+            transform: translateX(calc((-100% + 0px) * 3));
+        }
+        80%{
+            transform: translateX(calc((-100% + 0px) * 4));
+        }
+        90%{
+            transform: translateX(calc((-100% + 0px) * 4));
+        }
+        95%{
+            transform: translateX(calc((-100% + 0px) * 5));
+        }
+        100%{
+            transform: translateX(calc((-100% + 0px) * 5));
+        }
+    
+    }
+    .box3 .your-wishlist .show-wishlist ,.box3 .your-cart .show-cart{
+        top: 81px;
+        height:calc(100vh - 81px);
+    }
+
+    /* .trending-product .ncontainer .main,.apple .ncontainer .main,.lenovo .ncontainer .main,.dell .ncontainer .main,.hp .ncontainer .main,.microsoft .ncontainer .main{
+        grid-template-columns: 1fr;
+    } */
+}
+

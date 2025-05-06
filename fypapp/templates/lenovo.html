@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load custom_filters %}
+   <!-- lenovo section starts here -->
+    
+   <div class="lenovo" id="lenovo">
+    <div class="ncontainer">
+        <div class="heading"> <H2>Lenovo</H2> </div>
+            <div class="main">
+                {% for product in products %}
+                    <div class="card product-card" data-product-id="{{ product.id }}">
+                        <div class="img">
+                            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <h3>{{ product.title }}</h3>
+                            </div>
+                            <hr>
+                        
+                            <!-- Specifications -->
+                            <h3>Specification</h3>
+                            <p>
+                                <b>Brand:</b> {{ product.brand.title }} <br> 
+                                <b>Processor:</b> {{ product.processor }} Gen <br>
+                            
+                                <!-- RAM Selection -->
+                                <b>Ram:</b>
+                                <select class="ram-select" data-product-id="{{ product.id }}">
+                                    {% for ram in product.unique_rams %}
+                                        <option value="{{ ram.0 }}">{{ ram.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+                            
+                                <!-- Storage Selection -->
+                                <b>Storage:</b>
+                                <select class="storage-select" data-product-id="{{ product.id }}">
+                                    {% for storage in product.unique_storages %}
+                                        <option value="{{ storage.0 }}">{{ storage.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </p>
+                            <hr>
+                        
+                            <!-- Price Display -->
+                            <div class="price">
+                                <b>Price:</b> 
+                                <span class="product-price">
+                                    {% if product.productattribute_set.first %}
+                                        RS.{{ product.productattribute_set.first.price }}/-
+                                    {% else %}
+                                        Price not available
+                                    {% endif %}
+                                </span>
+                            </div>
+                        
+                            <!-- Cart & Wishlist Buttons -->
+                            <div class="buttoncw">
+                                <button  class="add-to-cart" type="button" id="addToCartBtn">Add to Cart</button>
+                                <button class="add-to-wishlist" type="button" id="addToWishlistBtn" data-product-id="{{ product.id }}">
+                                    <i class="fa-regular fa-heart"></i>
+                                </button>
+                            
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+               
+            </div>
+     </div >
+</div>
+ <!-- lenovo section ends here -->
+
+{% endblock %}
